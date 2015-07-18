@@ -1,0 +1,25 @@
+#!/bin/bash
+
+echo "Starting HA-Hub WiFiMon..."
+if [ ! -d /var/log/hahub ]
+then
+	echo "creating /var/log/hahub directory..."
+	mkdir /var/log/hahub
+fi
+
+if [ -e /var/log/hahub/hahub.log ]
+then
+	echo "Saving old hahub.log..."
+	mv /var/log/hahub/hahub.log /var/log/hahub/hahub.log.old
+fi
+echo > /var/log/hahub/hahub.log
+
+if [ -e /var/log/hahub/nohup.out ]
+then
+	echo "Removing old nohup.out..."
+	rm /var/log/hahub/nohup.out
+fi
+
+nohup /etc/hahub/hahubmain.py > /var/log/hahub/nohup.out &
+
+exit 0
