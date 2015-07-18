@@ -74,7 +74,6 @@ class Wifimon:
 			else:
 				badhlth=0
 				self.logger.log(1, wifists + " => All good!!")
-				self.logger.log(1, "Sending broadcast message")
 			time.sleep(wstsofftime)
 
 if __name__ == "__main__":

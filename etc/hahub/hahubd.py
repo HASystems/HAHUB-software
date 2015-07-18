@@ -16,7 +16,7 @@ import time
 # create all the utility objects - config, logger, ledops
 # ###############################################################################
 config = hapkg.haconfig.Config()
-config.readConfig("/etc/hahub/hahub.conf")
+config.readConfig("/etc/hahub/hahubd.conf")
 
 logger = hapkg.halogger.Logger()
 cfile = config.getConfigValue("LOGCONFIGFILE", "/etc/hahub/loglevel.conf")
@@ -33,17 +33,22 @@ ledops.initLEDs()
 # Setup signal handler
 # ###############################################################################
 def cleanup(signum,frame):
+	logger.log(5,"Signal received ("+str(signum)+"). Termonating...")
 	ledops.cleanupLEDs()
 	sys.exit(0)
 
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
+# ###############################################################################
+# Create the pidfile and a log entry for START
+# ###############################################################################
+mypid = str(os.getpid())
+pidfile = open("/var/run/hahub/hahub.pid","w")
+pidfile.write(mypid)
+pidfile.close()
 
-# ###############################################################################
-# Create the log entry for start with PID
-# ###############################################################################
-logger.log(5,"HAHUBMAIN STARTED. PID: "+str(os.getpid()))
+logger.log(5,"HAHUBMAIN STARTED. PID: "+mypid)
 
 # ###############################################################################
 # Start the WiFiMon thread
