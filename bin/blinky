@@ -1,0 +1,59 @@
+#!/bin/bash
+
+
+function clean_up {
+	echo "Unexporting GPIOs 19 and 6"
+	echo 19 > /sys/class/gpio/unexport
+	echo 6 > /sys/class/gpio/unexport
+	exit
+}
+trap "clean_up" SIGHUP SIGINT SIGTERM
+
+
+
+
+if [ ! -e /sys/class/gpio/gpio19 ]
+then
+	echo 19 > /sys/class/gpio/export
+fi
+while [ ! -e /sys/class/gpio/gpio19 ]; do
+	# echo "Waiting for GPIO-19"
+	sleep 1
+done
+while [ ! -w /sys/class/gpio/gpio19 ]; do
+	# echo "Waiting for GPIO-19 permissions"
+	sleep 1
+done
+# echo "GPIO-19 READY"
+
+if [ ! -e /sys/class/gpio/gpio6 ]
+then
+	echo 6 > /sys/class/gpio/export
+fi
+while [ ! -e /sys/class/gpio/gpio6 ]; do
+	# echo "Waiting for GPIO-06"
+	sleep 1
+done
+while [ ! -w /sys/class/gpio/gpio6 ]; do
+	# echo "Waiting for GPIO-06 permissions"
+	sleep 1
+done
+# echo "GPIO-06 READY"
+
+echo out > /sys/class/gpio/gpio19/direction
+echo out > /sys/class/gpio/gpio6/direction
+
+while true; do
+	echo 1 > /sys/class/gpio/gpio19/value
+	echo 0 > /sys/class/gpio/gpio6/value
+	sleep 1
+	echo 1 > /sys/class/gpio/gpio19/value
+	echo 1 > /sys/class/gpio/gpio6/value
+	sleep 1
+	echo 0 > /sys/class/gpio/gpio19/value
+	echo 1 > /sys/class/gpio/gpio6/value
+	sleep 1
+	echo 0 > /sys/class/gpio/gpio19/value
+	echo 0 > /sys/class/gpio/gpio6/value
+	sleep 1
+done

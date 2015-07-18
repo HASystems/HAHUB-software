@@ -1,0 +1,12 @@
+#!/bin/bash
+
+irsend SEND_ONCE U-VERSE KEY_POWER
+echo "U-Verse"
+sleep 3
+
+irsend SEND_ONCE RX-V675 KEY_POWER
+echo "RX-V675"
+sleep 3
+
+irsend SEND_ONCE Sharp_Aquous KEY_POWER
+echo "Sharp_Aquous"
