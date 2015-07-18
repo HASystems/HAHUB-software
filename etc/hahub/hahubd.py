@@ -33,7 +33,7 @@ ledops.initLEDs()
 # Setup signal handler
 # ###############################################################################
 def cleanup(signum,frame):
-	logger.log(5,"Signal received ("+str(signum)+"). Termonating...")
+	logger.log(5,"Signal received ("+str(signum)+"). Terminating...")
 	ledops.cleanupLEDs()
 	sys.exit(0)
 
@@ -48,7 +48,7 @@ pidfile = open("/var/run/hahub/hahub.pid","w")
 pidfile.write(mypid)
 pidfile.close()
 
-logger.log(5,"HAHUBMAIN STARTED. PID: "+mypid)
+logger.log(5,"HAHUBD STARTED. PID: "+mypid)
 
 # ###############################################################################
 # Start the WiFiMon thread
@@ -73,8 +73,8 @@ tresp.start()
 
 while True:
 	if not twifi.is_alive():
-		logger.log(5, twifi.name, " Is not alive!!")
+		logger.log(5, twifi.name + " Is not alive!!")
 	if not tresp.is_alive():
-		logger.log(5, tresp.name, " Is not alive!!")
+		logger.log(5, tresp.name + " Is not alive!!")
 	time.sleep(5)
 
