@@ -45,7 +45,7 @@ signal.signal(signal.SIGTERM, cleanup)
 # ###############################################################################
 mypid = str(os.getpid())
 pidfile = open("/var/run/hahub/hahub.pid","w")
-pidfile.write(mypid)
+pidfile.write(mypid+"\n")
 pidfile.close()
 
 logger.log(5,"HAHUBD STARTED. PID: "+mypid)

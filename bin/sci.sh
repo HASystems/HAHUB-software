@@ -1,5 +1,6 @@
 #!/bin/bash
 
+irsend SEND_ONCE RX-V675 KEY_TV
 irsend SEND_ONCE U-VERSE KEY_GUIDE
 sleep 1
 irsend SEND_ONCE U-VERSE KEY_1 KEY_2 KEY_5 KEY_8 KEY_OK
