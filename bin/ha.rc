@@ -1,0 +1,9 @@
+CMD v+ 		RX-V675 KEY_VOLUMEUP
+CMD v- 		RX-V675 KEY_VOLUMEDOWN
+CMD mute 	RX-V675 KEY_MUTE
+CMD cnnch 	U-Verse KEY_1 KEY_2 KEY_0 KEY_2
+CMD scich 	U-Verse KEY_1 KEY_2 KEY_5 KEY_8
+CMD scntv 	RX-V675 KEY_TV
+
+# Now the macros
+MACRO cnn 	scntv cnnch

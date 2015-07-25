@@ -5,19 +5,37 @@ import sys
 import time
 
 cmd_dict = {}
+macro_dict = {}
 
 def readconf(filename):
 	global cmd_dict
 	f = open(filename,"r")
-	for ln in f.readlines():
-		lis = ln.split()
-		c = lis[0]
-		rem = lis[1]
-		pars = lis[2:]
-		cmd_dict[c] = (rem,pars)
+	linenum = 0
+	for rawln in f.readlines():
+		linenum += 1
+		ln = rawln.strip()
+		if len(ln) > 0 and ln[0] != "#":
+			lis = ln.split()
+			if lis[0] == "CMD":
+				cmd = lis[1]
+				rem = lis[2]
+				pars = lis[3:]
+				cmd_dict[cmd] = (rem,pars)
+			elif lis[0] == "MACRO":
+				m = lis[1]
+				cmds = lis[2:]
+				macro_dict[m] = cmds
+			else:
+				print "Error processing file %s. Line %d, Unrecognized: '%s'" % (filename,linenum,ln)
 
-def isvalidop(op):
+def isop(op):
 	return cmd_dict.has_key(op)
+
+def ismacro(m):
+	return macro_dict.has_key(m)
+
+def expmacro(m):
+	return macro_dict[m]
 
 def mkcmd(op):
 	rem,pars = cmd_dict[op]
@@ -28,8 +46,12 @@ def mkcmd(op):
 	cmd = cmd + pstr
 	return cmd
 
-def irsend(cmd):
+def irsend(cmd,sim=False):
 	print "irsend: received command: " + cmd
+	if sim:
+		print "irsend Simulating."
+		return
+
 	s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 	srvr_addr = "/var/run/lirc/lircd"
 	try:
@@ -65,15 +87,22 @@ def irsend(cmd):
 			elif state == 9 and ln == 'END':
 				break
 			else:
-				print "UNEXPECTED INPUT: %s" % ln
+				print "Unexpected RESPONSE from LIRCD: %s" % ln
 				break
 	finally:
 		s.close
 
 
 if __name__ == "__main__":
-	readconf("ha.device.conf")
+	readconf("ha.rc")
 	op = sys.argv[1]
-	if isvalidop(op):
-		cmd =  mkcmd(op)
-		irsend(cmd)
+	cmdlist = []
+	if isop(op):
+		cmdlist = [op]
+	elif ismacro(op):
+		cmdlist = expmacro(op)
+	else:
+		print "Undefined command: '%s'." % op
+	for opcmd in cmdlist:
+		cmd =  mkcmd(opcmd)
+		irsend(cmd,sim=True)
