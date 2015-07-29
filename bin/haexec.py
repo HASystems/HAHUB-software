@@ -104,15 +104,13 @@ def runlist(cmdlist,tagtxt):
 		elif opcmd == "-l":
 			oper_list()
 		else:
-			print "Undefined command: '%s'. (Running %s)." % (op,tagtext)
+			print "Undefined command: '%s'. (Running %s)." % (opcmd,tagtxt)
 
 def oper_list():
-	print "----CMDs----------------"
-	for op in cmd_dict.keys():
+	for op in sorted(cmd_dict.keys()):
 		print op
-	print "----MACROs--------------"
-	for op in macro_dict.keys():
-		print op
+	for op in sorted(macro_dict.keys()):
+		print ">",op
 
 if __name__ == "__main__":
 	readconf("/etc/hahub/ha.rc")

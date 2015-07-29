@@ -24,6 +24,8 @@ CMD 8		U-verse KEY_8
 CMD 9		U-verse KEY_9
 CMD OK		U-verse KEY_OK
 CMD guide	U-verse KEY_GUIDE
+CMD ch-		U-verse KEY_CHPG-
+CMD ch+		U-verse KEY_CHPG+
 CMD rew		U-verse KEY_REPLAY
 CMD fwd		U-verse KEY_FWD
 CMD ff		U-verse KEY_FF
