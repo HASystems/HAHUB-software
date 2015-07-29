@@ -1,0 +1,42 @@
+#
+# This section defines operations including which device performs those and how
+# Depends on how the devices are connected (which controls audio, channels, etc.)
+#
+CMD uvon	U-Verse KEY_POWER
+CMD tvon	Sharp_Aquous KEY_POWER
+CMD scntv 	RX-V675 KEY_TV
+CMD scndvd 	RX-V675 KEY_DVD
+CMD scnpc 	RX-V675 KEY_CD
+CMD scnradio 	RX-V675 KEY_RADIO
+CMD scnroku 	RX-V675 KEY_HDMI4
+CMD v+ 		RX-V675 KEY_VOLUMEUP
+CMD v- 		RX-V675 KEY_VOLUMEDOWN
+CMD mute 	RX-V675 KEY_MUTE
+CMD 0		U-verse KEY_0
+CMD 1		U-verse KEY_1
+CMD 2		U-verse KEY_2
+CMD 3		U-verse KEY_3
+CMD 4		U-verse KEY_4
+CMD 5		U-verse KEY_5
+CMD 6		U-verse KEY_6
+CMD 7		U-verse KEY_7
+CMD 8		U-verse KEY_8
+CMD 9		U-verse KEY_9
+CMD OK		U-verse KEY_OK
+CMD guide	U-verse KEY_GUIDE
+CMD rew		U-verse KEY_REPLAY
+CMD fwd		U-verse KEY_FWD
+CMD ff		U-verse KEY_FF
+CMD rr		U-verse KEY_REW
+
+#
+# Now the macros
+# These are basically convinience to the user
+#
+MACRO cnn 	scntv 1 2 0 2 OK
+MACRO msnbc 	scntv 1 2 1 5 OK
+MACRO sci 	scntv 1 2 5 8 OK
+MACRO star+ 	scntv 3 7 0 6 OK
+MACRO zee 	scntv 3 7 0 2 OK
+MACRO set 	scntv 3 7 0 4 OK
+MACRO allon 	scntv uvon tvon

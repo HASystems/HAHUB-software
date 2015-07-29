@@ -47,7 +47,7 @@ def mkcmd(op):
 	return cmd
 
 def irsend(cmd,sim=False):
-	print "irsend: received command: " + cmd
+	# print "irsend: received command: " + cmd
 	if sim:
 		print "irsend Simulating."
 		return
@@ -72,7 +72,7 @@ def irsend(cmd,sim=False):
 				state = 2 # wait for result
 			elif state == 2:
 				if ln == "SUCCESS":
-					print "Success"
+					# print "Success"
 					state = 9 # wait END
 				if ln == "ERROR":
 					# print "I see error"
@@ -92,17 +92,29 @@ def irsend(cmd,sim=False):
 	finally:
 		s.close
 
+def runlist(cmdlist,tagtxt):
+	for opcmd in cmdlist:
+		if isop(opcmd):
+			cmd =  mkcmd(opcmd)
+			irsend(cmd)
+			# irsend(cmd,sim=True)
+		elif ismacro(opcmd):
+			newcmdlist = expmacro(opcmd)
+			runlist(newcmdlist,opcmd)
+		elif opcmd == "-l":
+			oper_list()
+		else:
+			print "Undefined command: '%s'. (Running %s)." % (op,tagtext)
+
+def oper_list():
+	print "----CMDs----------------"
+	for op in cmd_dict.keys():
+		print op
+	print "----MACROs--------------"
+	for op in macro_dict.keys():
+		print op
 
 if __name__ == "__main__":
-	readconf("ha.rc")
-	op = sys.argv[1]
-	cmdlist = []
-	if isop(op):
-		cmdlist = [op]
-	elif ismacro(op):
-		cmdlist = expmacro(op)
-	else:
-		print "Undefined command: '%s'." % op
-	for opcmd in cmdlist:
-		cmd =  mkcmd(opcmd)
-		irsend(cmd,sim=True)
+	readconf("/etc/hahub/ha.rc")
+	cmdlist = sys.argv[1:]
+	runlist(cmdlist,"at Top Level")
