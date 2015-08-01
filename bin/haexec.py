@@ -47,9 +47,9 @@ def mkcmd(op):
 	return cmd
 
 def irsend(cmd,sim=False):
-	# print "irsend: received command: " + cmd
 	if sim:
 		print "irsend Simulating."
+		print "irsend: Command: " + cmd
 		return
 
 	s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -97,6 +97,7 @@ def runlist(cmdlist,tagtxt):
 		if isop(opcmd):
 			cmd =  mkcmd(opcmd)
 			irsend(cmd)
+			time.sleep(0.5)
 			# irsend(cmd,sim=True)
 		elif ismacro(opcmd):
 			newcmdlist = expmacro(opcmd)
