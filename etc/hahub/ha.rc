@@ -2,43 +2,49 @@
 # This section defines operations including which device performs those and how
 # Depends on how the devices are connected (which controls audio, channels, etc.)
 #
-CMD uvon	U-Verse KEY_POWER
-CMD tvon	Sharp_Aquous KEY_POWER
-CMD scntv 	RX-V675 KEY_TV
-CMD scndvd 	RX-V675 KEY_DVD
-CMD scnpc 	RX-V675 KEY_CD
-CMD scnradio 	RX-V675 KEY_RADIO
-CMD scnroku 	RX-V675 KEY_HDMI4
-CMD v+ 		RX-V675 KEY_VOLUMEUP
-CMD v- 		RX-V675 KEY_VOLUMEDOWN
-CMD mute 	RX-V675 KEY_MUTE
-CMD 0		U-verse KEY_0
-CMD 1		U-verse KEY_1
-CMD 2		U-verse KEY_2
-CMD 3		U-verse KEY_3
-CMD 4		U-verse KEY_4
-CMD 5		U-verse KEY_5
-CMD 6		U-verse KEY_6
-CMD 7		U-verse KEY_7
-CMD 8		U-verse KEY_8
-CMD 9		U-verse KEY_9
-CMD OK		U-verse KEY_OK
-CMD guide	U-verse KEY_GUIDE
-CMD ch-		U-verse KEY_CHPG-
-CMD ch+		U-verse KEY_CHPG+
-CMD rew		U-verse KEY_REPLAY
-CMD fwd		U-verse KEY_FWD
-CMD ff		U-verse KEY_FF
-CMD rr		U-verse KEY_REW
+CMD Power:uvon		U-Verse KEY_POWER
+CMD Power:tvon		Sharp_Aquous KEY_POWER
+CMD Scene:scntv 	RX-V675 KEY_TV
+CMD Scene:scndvd 	RX-V675 KEY_DVD
+CMD Scene:scnpc 	RX-V675 KEY_CD
+CMD Scene:scnradio 	RX-V675 KEY_RADIO
+CMD Scene:scnroku 	RX-V675 KEY_HDMI4
+CMD Audio:v+ 		RX-V675 KEY_VOLUMEUP
+CMD Audio:v- 		RX-V675 KEY_VOLUMEDOWN
+CMD Audio:mute 		RX-V675 KEY_MUTE
+CMD Channel:0		U-verse KEY_0
+CMD Channel:1		U-verse KEY_1
+CMD Channel:2		U-verse KEY_2
+CMD Channel:3		U-verse KEY_3
+CMD Channel:4		U-verse KEY_4
+CMD Channel:5		U-verse KEY_5
+CMD Channel:6		U-verse KEY_6
+CMD Channel:7		U-verse KEY_7
+CMD Channel:8		U-verse KEY_8
+CMD Channel:9		U-verse KEY_9
+CMD Arrows:OK		U-verse KEY_OK
+CMD Arrows:up		U-verse KEY_UP
+CMD Arrows:down		U-verse KEY_DOWN
+CMD Arrows:left		U-verse KEY_LEFT
+CMD Arrows:right	U-verse KEY_RIGHT
+CMD Channel:guide	U-verse KEY_GUIDE
+CMD Channel:ch-		U-verse KEY_CHPG-
+CMD Channel:ch+		U-verse KEY_CHPG+
+CMD Player:rew		U-verse KEY_REPLAY
+CMD Player:fwd		U-verse KEY_FWD
+CMD Player:ff		U-verse KEY_FF
+CMD Player:rr		U-verse KEY_REW
+CMD Player:play		U-verse KEY_PLAY
+CMD Player:pause	U-verse KEY_PAUSE
 
 #
 # Now the macros
 # These are basically convinience to the user
 #
-MACRO cnn 	scntv 1 2 0 2 OK
-MACRO msnbc 	scntv 1 2 1 5 OK
-MACRO sci 	scntv 1 2 5 8 OK
-MACRO star+ 	scntv 3 7 0 6 OK
-MACRO zee 	scntv 3 7 0 2 OK
-MACRO set 	scntv 3 7 0 4 OK
-MACRO allon 	scntv uvon tvon
+MACRO Channel:cnn 	scntv 1 2 0 2 OK
+MACRO Channel:msnbc 	scntv 1 2 1 5 OK
+MACRO Channel:sci 	scntv 1 2 5 8 OK
+MACRO Channel:star+ 	scntv 3 7 0 6 OK
+MACRO Channel:zee 	scntv 3 7 0 2 OK
+MACRO Channel:set 	scntv 3 7 0 4 OK
+MACRO Power:allon 	scntv uvon tvon

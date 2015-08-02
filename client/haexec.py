@@ -6,6 +6,8 @@ import time
 
 cmd_dict = {}
 macro_dict = {}
+grp_dict = {}
+defgrp = "Ungrouped"
 
 def readconf(filename):
 	global cmd_dict
@@ -18,11 +20,21 @@ def readconf(filename):
 			lis = ln.split()
 			if lis[0] == "CMD":
 				cmd = lis[1]
+				if cmd.find(":") >= 0:
+					(grp,cmd) = cmd.split(":")
+				else:
+					grp = defgrp
+				grp_dict[cmd] = grp
 				rem = lis[2]
 				pars = lis[3:]
 				cmd_dict[cmd] = (rem,pars)
 			elif lis[0] == "MACRO":
 				m = lis[1]
+				if m.find(":") >= 0:
+					(grp,m) = m.split(":")
+				else:
+					grp = defgrp
+				grp_dict[m] = grp
 				cmds = lis[2:]
 				macro_dict[m] = cmds
 			else:
@@ -37,7 +49,7 @@ def ismacro(m):
 def expmacro(m):
 	return macro_dict[m]
 
-def mkcmd(op):
+def excmd(op):
 	rem,pars = cmd_dict[op]
 	cmd = "SEND_ONCE " + rem 
 	pstr = ""
@@ -95,23 +107,33 @@ def irsend(cmd,sim=False):
 def runlist(cmdlist,tagtxt):
 	for opcmd in cmdlist:
 		if isop(opcmd):
-			cmd =  mkcmd(opcmd)
+			cmd =  excmd(opcmd)
 			irsend(cmd)
 			time.sleep(0.5)
 			# irsend(cmd,sim=True)
 		elif ismacro(opcmd):
 			newcmdlist = expmacro(opcmd)
 			runlist(newcmdlist,opcmd)
-		elif opcmd == "-l":
-			oper_list()
 		else:
 			print "Undefined command: '%s'. (Running %s)." % (opcmd,tagtxt)
 
 def oper_list():
-	for op in sorted(cmd_dict.keys()):
-		print op
+	grouped = {}
+	for op in cmd_dict.keys():
+		grp = grp_dict[op]
+		if grouped.has_key(grp):
+			(grouped[grp]).append(op)
+		else:
+			grouped[grp] = [op]
+		# print op
 	for op in sorted(macro_dict.keys()):
-		print ">",op
+		grp = grp_dict[op]
+		if grouped.has_key(grp):
+			(grouped[grp]).append(op)
+		else:
+			grouped[grp] = [op]
+		# print ">",op
+	return grouped
 
 if __name__ == "__main__":
 	readconf("/etc/hahub/ha.rc")
