@@ -41,7 +41,7 @@ rm -rf $BINDIR/*
 echo "Copying latest ~/bin files..."
 cp $SDIR/bin/* $BINDIR
 echo "Copying latest ~/client files..."
-cp $SDIR/client/* $BINDIR
+cp -r $SDIR/client/* $BINDIR
 
 echo "Copying rc.local to /etc/rc.local..."
 cp $SDIR/etc/rc.local /etc/rc.local

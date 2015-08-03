@@ -12,6 +12,12 @@ class Haexec:
 		self.grp_dict = {}
 		self.defgrp = "Ungrouped"
 
+	def setconfig(self, config):
+		self.config = config
+
+	def setlogger(self, logger):
+		self.logger = logger
+
 	def readconf(self,filename):
 		f = open(filename,"r")
 		linenum = 0
@@ -40,7 +46,7 @@ class Haexec:
 					cmds = lis[2:]
 					self.macro_dict[m] = cmds
 				else:
-					print "Error processing file %s. Line %d, Unrecognized: '%s'" % (filename,linenum,ln)
+					self.logger.log(3, "Error processing file %s. Line %d, Unrecognized: '%s'" % (filename,linenum,ln))
 
 	def isop(self,op):
 		return self.cmd_dict.has_key(op)
@@ -62,12 +68,12 @@ class Haexec:
 
 	def irsend(self,cmd,sim=False):
 		if sim:
-			print "irsend Simulating."
-			print "irsend: Command: " + cmd
+			self.logger.log(1, "irsend Simulating.")
+			self.logger.log(1, "irsend: Command: " + cmd)
 			return
 
 		s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-		srvr_addr = "/var/run/lirc/lircd"
+		srvr_addr = self.config.getConfigValue("LIRCDSOCK", "/var/run/lirc/lircd")
 		try:
 			s.connect(srvr_addr)
 		except socket.error, msg:
@@ -136,9 +142,20 @@ class Haexec:
 			# print ">",op
 		return grouped
 
-import os
 if __name__ == "__main__":
+	import os
+	import hapkg.haconfig
+	import hapkg.halogger
+
+	config = hapkg.haconfig.Config()
+	config.readConfig("/etc/hahub/hahubd.conf")
+
+	logger = hapkg.halogger.Logger()
+	logger.configlogger("/etc/hahub/loglevel.conf", "/var/log/hahub", "haexec")
+
 	haexec = Haexec()
+	haexec.setconfig(config)
+	haexec.setlogger(logger)
 	rcfiles = ["/etc/hahub/ha.rc", "~/.ha.rc", "./ha.rc", "~/bin/ha.rc"]
 	for rc in rcfiles:
 		rcpath = os.path.expanduser(rc)

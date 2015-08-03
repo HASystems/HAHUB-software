@@ -13,12 +13,12 @@ then
 	mkdir /var/log/hahub
 fi
 
-if [ -e /var/log/hahub/hahub.log ]
+if [ -e /var/log/hahub/hahubd.log ]
 then
-	echo "Saving old hahub.log..."
-	mv /var/log/hahub/hahub.log /var/log/hahub/hahub.log.old
+	echo "Saving old hahubd.log..."
+	mv /var/log/hahub/hahubd.log /var/log/hahub/hahubd.log.old
 fi
-echo > /var/log/hahub/hahub.log
+echo > /var/log/hahub/hahubd.log
 
 if [ -e /var/log/hahub/nohup.out ]
 then

@@ -21,7 +21,7 @@ config.readConfig("/etc/hahub/hahubd.conf")
 logger = hapkg.halogger.Logger()
 cfile = config.getConfigValue("LOGCONFIGFILE", "/etc/hahub/loglevel.conf")
 logdir = config.getConfigValue("LOGFILEDIR", "/var/log/hahub")
-logbase = config.getConfigValue("LOGFILEBASE", "hahub")
+logbase = "hahubd"
 logger.configlogger(cfile, logdir, logbase)
 
 ledops = hapkg.haledops.Ledops()
