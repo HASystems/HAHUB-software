@@ -1,0 +1,29 @@
+<html>
+	<head>
+		{% if title %}
+			<title>{{ title }} - Web Remote</title>
+		{% else %}
+			<title>Welcome to Web Remote</title>
+		{% endif %}
+	</head>
+	<body>
+		<div>
+			<h1>Action: 
+				{% for g in commands.keys() %}
+					<p>
+					<h2>Group: {{g}}</h2>
+					{% for c in commands[g] %}
+						<a href="/hacmdapi/v1.3/tasks/{{c}}">{{c}}  </a>
+					{% endfor %}
+					</p>
+				{% endfor %}
+				<a href="/">Home</a> 
+				<a href="/power">Power</a> 
+				<a href="/volumeup">Volume Up</a> 
+				<a href="/volumedown">Volume Down</a>
+			</h1>
+		</div>
+		{% block content %}
+		{% endblock %}
+	</body>
+</html>

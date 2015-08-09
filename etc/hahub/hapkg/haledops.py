@@ -13,9 +13,6 @@ class Ledops:
 	def setconfig(self, config):
 		self.config = config
 
-	def setlogger(self, logger):
-		self.logger = logger
-
 	def initLEDs(self):
 		self.hlthLED = self.config.getConfigIntValue("HLTHLED",13)
 		self.wstsLED = self.config.getConfigIntValue("WSTSLED",5)
@@ -59,7 +56,7 @@ class Ledops:
 if __name__ == "__main__":
 	import haconfig
 	config = haconfig.Config()
-	config.readConfig("/etc/hahub/hahub.conf")
+	config.readConfig("/etc/hahub/hahubd.conf")
 
 	ledops = Ledops()
 	ledops.setconfig(config)

@@ -39,18 +39,16 @@ fi
 echo "Removing old $BINDIR files..."
 rm -rf $BINDIR/*
 echo "Copying latest ~/bin files..."
-cp $SDIR/bin/* $BINDIR
+cp -r $SDIR/bin/* $BINDIR
 echo "Copying latest ~/client files..."
 cp -r $SDIR/client/* $BINDIR
 
 echo "Copying rc.local to /etc/rc.local..."
-cp $SDIR/etc/rc.local /etc/rc.local
+cp -r $SDIR/etc/rc.local /etc/rc.local
 
 echo "Removing old $ETCDIR files..."
 rm -rf $ETCDIR/*
 echo "Copying files to $ETCDIR ..."
 cp -r $SDIR/etc/hahub/* $ETCDIR
 
-echo "Setting log level to Warn ..."
-/etc/hahub/setlogwarn
 echo "Done"

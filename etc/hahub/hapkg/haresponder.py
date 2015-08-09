@@ -2,6 +2,7 @@
 
 import socket
 import time
+import syslog
 
 class Responder:
 	def __init__(self):
@@ -10,13 +11,11 @@ class Responder:
 	def setconfig(self, config):
 		self.config = config
 
-	def setlogger(self, logger):
-		self.logger = logger
-
 	def sendbcast(self):
 		prod = self.config.getConfigValue("PRODUCT","HAHUB")
 		ver = self.config.getConfigValue("VERSION","1.3")
-		data = "PRODUCT="+prod+"\n"+"VERSION="+ver+"\n"+"UTC="+repr(time.time())+"\n"
+		httpport = self.config.getConfigValue("HTTPPORT","5000")
+		data = "PRODUCT="+prod+"\n"+"VERSION="+ver+"\n"+"HTTPPORT="+httpport+"\n"+"UTC="+repr(time.time())+"\n"
 
 		bcastsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		bcastsock.bind(('', 0))
@@ -30,30 +29,27 @@ class Responder:
 		rcvport = self.config.getConfigIntValue("REQ_BCASTPORT",50001)
 		rcvsock.bind(('',rcvport))
 		data, addr = rcvsock.recvfrom(1024)
-		self.logger.log(1, "Received Request From: '%s', msg: '%s'" % (addr[0], data))
+		syslog.syslog(syslog.LOG_INFO, "Received Request From: '%s', msg: '%s'" % (addr[0], data))
 
 	def run(self):
-		self.logger.log(5,"RESPONDER STARTED.")
+		syslog.syslog(syslog.LOG_CRIT,"RESPONDER STARTED.")
 		while self.go:
-			self.logger.log(1, "Waiting to receive a response request ...")
+			syslog.syslog(syslog.LOG_INFO, "Waiting to receive a response request ...")
 			self.rcvbcast()
 			for i in range(5):
 				time.sleep(0.25)
-				self.logger.log(1, "Responding ...")
+				syslog.syslog(syslog.LOG_INFO, "Responding ...")
 				self.sendbcast()
 
 
 if __name__ == "__main__":
 	import haconfig
-	import halogger
 
-	logger = halogger.Logger()
-	logger.configlogger("/etc/hahub/loglevel.conf", "/var/log/hahub", "hahub")
+	syslog.openlog("hahubd",0,syslog.LOG_LOCAL0)
 
 	config = haconfig.Config()
-	config.readConfig("/etc/hahub/hahub.conf")
+	config.readConfig("/etc/hahub/hahubd.conf")
 
 	resp = Responder()
 	resp.setconfig(config)
-	resp.setlogger(logger)
 	resp.run()

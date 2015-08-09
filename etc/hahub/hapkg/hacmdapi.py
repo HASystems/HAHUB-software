@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
+import syslog
 import socket
-import sys
 import time
 
-class Haexec:
+class HacmdAPI:
 
 	def __init__(self):
 		self.cmd_dict = {}
@@ -14,9 +14,6 @@ class Haexec:
 
 	def setconfig(self, config):
 		self.config = config
-
-	def setlogger(self, logger):
-		self.logger = logger
 
 	def readconf(self,filename):
 		f = open(filename,"r")
@@ -46,7 +43,7 @@ class Haexec:
 					cmds = lis[2:]
 					self.macro_dict[m] = cmds
 				else:
-					self.logger.log(3, "Error processing file %s. Line %d, Unrecognized: '%s'" % (filename,linenum,ln))
+					syslog.syslog(syslog.LOG_WARNING, "Error processing file %s. Line %d, Unrecognized: '%s'" % (filename,linenum,ln))
 
 	def isop(self,op):
 		return self.cmd_dict.has_key(op)
@@ -68,16 +65,16 @@ class Haexec:
 
 	def irsend(self,cmd,sim=False):
 		if sim:
-			self.logger.log(1, "irsend Simulating.")
-			self.logger.log(1, "irsend: Command: " + cmd)
-			return
+			syslog.syslog(syslog.LOG_INFO, "irsend: Simulating Command: " + cmd)
+			return 0
 
 		s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		srvr_addr = self.config.getConfigValue("LIRCDSOCK", "/var/run/lirc/lircd")
 		try:
 			s.connect(srvr_addr)
 		except socket.error, msg:
-			sys.exit(1)
+			syslog.syslog(syslog.LOG_CRIT,"Error writing to LIRCD socket. %s" % msg)
+			return -1
 
 		try:
 			s.sendall(cmd + "\n")
@@ -102,15 +99,16 @@ class Haexec:
 				elif state == 4:
 					c = int(ln)
 					for i in range(c):
-						print "Error: %s" % (f.readline()).rstrip('\n')
+						syslog.syslog(syslog.LOG_WARNING, "Error: %s" % (f.readline()).rstrip('\n'))
 					state = 9 # wait END
 				elif state == 9 and ln == 'END':
 					break
 				else:
-					print "Unexpected RESPONSE from LIRCD: %s" % ln
+					syslog.syslog(syslog.LOG_WARNING, "Unexpected RESPONSE from LIRCD: %s" % ln)
 					break
 		finally:
 			s.close
+		return 0
 
 	def runlist(self,cmdlist,tagtxt):
 		for opcmd in cmdlist:
@@ -122,19 +120,19 @@ class Haexec:
 				newcmdlist = self.expmacro(opcmd)
 				self.runlist(newcmdlist,opcmd)
 			else:
-				print "Undefined command: '%s'. (Running %s)." % (opcmd,tagtxt)
+				syslog.syslog(syslog.LOG_WARNING, "Undefined command: '%s'. (Running %s)." % (opcmd,tagtxt))
 
 	def oper_list(self):
 		grouped = {}
-		for op in cmd_dict.keys():
-			grp = grp_dict[op]
+		for op in self.cmd_dict.keys():
+			grp = self.grp_dict[op]
 			if grouped.has_key(grp):
 				(grouped[grp]).append(op)
 			else:
 				grouped[grp] = [op]
 			# print op
-		for op in sorted(macro_dict.keys()):
-			grp = grp_dict[op]
+		for op in sorted(self.macro_dict.keys()):
+			grp = self.grp_dict[op]
 			if grouped.has_key(grp):
 				(grouped[grp]).append(op)
 			else:
@@ -144,23 +142,22 @@ class Haexec:
 
 if __name__ == "__main__":
 	import os
+	import sys
 	import hapkg.haconfig
-	import hapkg.halogger
+
+	syslog.openlog("HacmdAPI",0,syslog.LOG_LOCAL0)
+	syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_INFO))
 
 	config = hapkg.haconfig.Config()
 	config.readConfig("/etc/hahub/hahubd.conf")
 
-	logger = hapkg.halogger.Logger()
-	logger.configlogger("/etc/hahub/loglevel.conf", "/var/log/hahub", "haexec")
-
-	haexec = Haexec()
-	haexec.setconfig(config)
-	haexec.setlogger(logger)
+	hacmdapi = HacmdAPI()
+	hacmdapi.setconfig(config)
 	rcfiles = ["/etc/hahub/ha.rc", "~/.ha.rc", "./ha.rc", "~/bin/ha.rc"]
 	for rc in rcfiles:
 		rcpath = os.path.expanduser(rc)
 		if os.access(rcpath, os.R_OK):
-			print "Reading conf from", rcpath
-			haexec.readconf(rcpath)
+			syslog.syslog(syslog.LOG_INFO, "Reading conf from %s" % rcpath)
+			hacmdapi.readconf(rcpath)
 	cmdlist = sys.argv[1:]
-	haexec.runlist(cmdlist,"at Top Level")
+	hacmdapi.runlist(cmdlist,"at Top Level")

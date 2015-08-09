@@ -2,7 +2,7 @@
 
 import time
 import subprocess
-
+import syslog
 
 class Wifimon:
 
@@ -12,9 +12,6 @@ class Wifimon:
 
 	def setconfig(self, config):
 		self.config = config
-
-	def setlogger(self, logger):
-		self.logger = logger
 
 	def setledops(self, ledops):
 		self.ledops = ledops
@@ -31,7 +28,7 @@ class Wifimon:
 		return wpastatus['wpa_state']
 
 	def run(self):
-		self.logger.log(5,"WIFIMON STARTED.")
+		syslog.syslog(syslog.LOG_CRIT,"WIFIMON STARTED.")
 
 		warnbadhlth = self.config.getConfigIntValue("WARNBADHLTH",90)
 		critbadhlth = self.config.getConfigIntValue("CRITBADHLTH",120)
@@ -43,22 +40,22 @@ class Wifimon:
 		badhlth = 0
 		while self.go:
 			if badhlth > warnbadhlth:
-				self.logger.log(5,"Health Status = " + str(badhlth) + ", past Warning Level " + str(warnbadhlth))
+				syslog.syslog(syslog.LOG_CRIT,"Health Status = " + str(badhlth) + ", past Warning Level " + str(warnbadhlth))
 				self.ledops.hlthledon()
 				if badhlth > critbadhlth:
-					self.logger.log(5, "Health Status = " + str(badhlth) + ", past CRITICAL " + str(critbadhlth))
+					syslog.syslog(syslog.LOG_CRIT, "Health Status = " + str(badhlth) + ", past CRITICAL " + str(critbadhlth))
 					subprocess.call("reboot")
 			else:
 				self.ledops.hlthledoff()
 			self.ledops.wstsledon()
 			time.sleep(wstsontime)
 			wifists = self.getwpastate()
-			self.logger.log(1, "WiFi WPA Status: " + wifists)
+			syslog.syslog(syslog.LOG_INFO, "WiFi WPA Status: " + wifists)
 			if wifists != "COMPLETED":
 				self.ledops.wstsledoff()
 				if wifists == "INACTIVE":
 					badhlth = badhlth + defhlthinc
-					self.logger.log(3, wifists + ": Restarting PBC...")
+					syslog.syslog(syslog.LOG_WARNING, wifists + ": Restarting PBC...")
 					subpriocess.call(["wpa_cli", "wps_pbc"])
 				elif wifists == "SCANNING":
 					badhlth = badhlth + defhlthinc
@@ -69,35 +66,28 @@ class Wifimon:
 				elif wifists == "DISCONNECTED":
 					badhlth = badhlth + defhlthinc
 				else:
-					self.logger.log(3, wifists + ": Unrecognized status found")
+					syslog.syslog(syslog.LOG_WARNING, wifists + ": Unrecognized status found")
 					badhlth = badhlth + maxhlthinc
 			else:
 				badhlth=0
-				self.logger.log(1, wifists + " => All good!!")
+				syslog.syslog(syslog.LOG_INFO, wifists + " => All good!!")
 			time.sleep(wstsofftime)
 
 if __name__ == "__main__":
 	import haconfig
-	import halogger
 	import haledops
 	import signal
 
 	config = haconfig.Config()
 	config.readConfig("/etc/hahub/hahub.conf")
 
-	logger = halogger.Logger()
-	cfile = config.getConfigValue("LOGCONFIGFILE", "/etc/hahub/loglevel.conf")
-	logdir = config.getConfigValue("LOGFILEDIR", "/var/log/hahub")
-	logbase = config.getConfigValue("LOGFILEBASE", "hahub")
-	logger.configlogger(cfile, logdir, logbase)
 
 	ledops = haledops.Ledops()
 	ledops.setconfig(config)
-	ledops.setlogger(logger)
 	ledops.initLEDs()
 
 	def cleanup(signum, frame):
-		logger.log(5,"Signal received: "+str(signum))
+		syslog.syslog(syslog.LOG_CRIT,"Signal received: "+str(signum))
 		ledops.cleanupLEDs()
 		quit()
 	signal.signal(signal.SIGTERM, cleanup)
@@ -105,6 +95,5 @@ if __name__ == "__main__":
 
 	wifimon = Wifimon()
 	wifimon.setconfig(config)
-	wifimon.setlogger(logger)
 	wifimon.setledops(ledops)
 	wifimon.run()

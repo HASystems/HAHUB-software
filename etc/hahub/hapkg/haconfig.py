@@ -41,6 +41,6 @@ class Config:
 
 if __name__ == "__main__":
 	config = Config()
-	config.readConfig("/etc/hahub/hahub.conf")
+	config.readConfig("/etc/hahub/hahubd.conf")
 	print config.getConfigValue("RES_BCASTPORT",1)
 

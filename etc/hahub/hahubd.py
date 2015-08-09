@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
 import hapkg.haconfig
-import hapkg.halogger
 import hapkg.haledops
 import hapkg.haresponder
 import hapkg.hawifimon
+import syslog
 import threading
 import signal
 import sys
@@ -13,32 +13,39 @@ import time
 
 
 # ###############################################################################
-# create all the utility objects - config, logger, ledops
+# create all the utility objects - config, ledops, open syslog
 # ###############################################################################
+syslog.openlog("hahubd",0,syslog.LOG_LOCAL0)
+syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
+
 config = hapkg.haconfig.Config()
 config.readConfig("/etc/hahub/hahubd.conf")
 
-logger = hapkg.halogger.Logger()
-cfile = config.getConfigValue("LOGCONFIGFILE", "/etc/hahub/loglevel.conf")
-logdir = config.getConfigValue("LOGFILEDIR", "/var/log/hahub")
-logbase = "hahubd"
-logger.configlogger(cfile, logdir, logbase)
-
 ledops = hapkg.haledops.Ledops()
 ledops.setconfig(config)
-ledops.setlogger(logger)
 ledops.initLEDs()
 
 # ###############################################################################
 # Setup signal handler
 # ###############################################################################
 def cleanup(signum,frame):
-	logger.log(5,"Signal received ("+str(signum)+"). Terminating...")
+	syslog.syslog(syslog.LOG_CRIT,"Signal received ("+str(signum)+"). Terminating...")
 	ledops.cleanupLEDs()
 	sys.exit(0)
 
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
+
+def chloglevel(signum,frame):
+	if signum == signal.SIGUSR1:
+		syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
+		syslog.syslog(syslog.LOG_WARNING,"Signal received ("+str(signum)+"). Setting logging level to WARNING.")
+	if signum == signal.SIGUSR2:
+		syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_INFO))
+		syslog.syslog(syslog.LOG_INFO,"Signal received ("+str(signum)+"). Setting logging level to INFO.")
+
+signal.signal(signal.SIGUSR1, chloglevel)
+signal.signal(signal.SIGUSR2, chloglevel)
 
 # ###############################################################################
 # Create the pidfile and a log entry for START
@@ -48,14 +55,13 @@ pidfile = open("/var/run/hahub/hahub.pid","w")
 pidfile.write(mypid+"\n")
 pidfile.close()
 
-logger.log(5,"HAHUBD STARTED. PID: "+mypid)
+syslog.syslog(syslog.LOG_CRIT,"HAHUBD STARTED. PID: "+mypid)
 
 # ###############################################################################
 # Start the WiFiMon thread
 # ###############################################################################
 wifimon = hapkg.hawifimon.Wifimon()
 wifimon.setconfig(config)
-wifimon.setlogger(logger)
 wifimon.setledops(ledops)
 twifi = threading.Thread(target=wifimon.run, name="WiFiMon")
 twifi.daemon = True
@@ -66,15 +72,14 @@ twifi.start()
 # ###############################################################################
 responder = hapkg.haresponder.Responder()
 responder.setconfig(config)
-responder.setlogger(logger)
 tresp = threading.Thread(target=responder.run, name="Responder")
 tresp.daemon = True
 tresp.start()
 
 while True:
 	if not twifi.is_alive():
-		logger.log(5, twifi.name + " Is not alive!!")
+		syslog.syslog(syslog.LOG_CRIT, twifi.name + " Is not alive!!")
 	if not tresp.is_alive():
-		logger.log(5, tresp.name + " Is not alive!!")
+		syslog.syslog(syslog.LOG_CRIT, tresp.name + " Is not alive!!")
 	time.sleep(5)
 
