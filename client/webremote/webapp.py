@@ -16,6 +16,7 @@ def get_task(task_id):
 @app.route('/')
 def index():
 	syslog.syslog(syslog.LOG_INFO, "home page")
+	print render_template('cmdhome.html', commands=cmdapi.oper_list())
 	return render_template('cmdhome.html', commands=cmdapi.oper_list())
 
 @app.route('/power')

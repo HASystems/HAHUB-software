@@ -5,19 +5,19 @@ import time
 
 class Ledops:
 	def __init__(self):
-		self.hlthLED = 13
-		self.wstsLED = 5
-		self.hahubstsLED1 = 6
-		self.hahubstsLED2 = 19
+		self.hlthLED = 19
+		self.wstsLED = 13
+		self.hahubstsLED1 = 5
+		self.hahubstsLED2 = 6
 
 	def setconfig(self, config):
 		self.config = config
 
 	def initLEDs(self):
-		self.hlthLED = self.config.getConfigIntValue("HLTHLED",13)
-		self.wstsLED = self.config.getConfigIntValue("WSTSLED",5)
-		self.hahubstsLED1 = self.config.getConfigIntValue("HAHUBSTSLED1",6)
-		self.hahubstsLED2 = self.config.getConfigIntValue("HAHUBSTSLED2",19)
+		self.hlthLED = self.config.getConfigIntValue("HLTHLED",19)
+		self.wstsLED = self.config.getConfigIntValue("WSTSLED",13)
+		self.hahubstsLED1 = self.config.getConfigIntValue("HAHUBSTSLED1",5)
+		self.hahubstsLED2 = self.config.getConfigIntValue("HAHUBSTSLED2",6)
 		gpio.setwarnings(False)
 		gpio.setmode(gpio.BCM)
 		gpio.setup(self.hlthLED, gpio.OUT)

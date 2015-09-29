@@ -10,8 +10,7 @@
 		<div>
 			<h1>Action: 
 				{% for g in commands.keys() %}
-					<p>
-					<h2>Group: {{g}}</h2>
+					<p><h2>Group: {{g}}</h2>
 					{% for c in commands[g] %}
 						<a href="/hacmdapi/v1.3/tasks/{{c}}">{{c}}  </a>
 					{% endfor %}
