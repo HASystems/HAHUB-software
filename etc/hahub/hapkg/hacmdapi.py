@@ -44,6 +44,7 @@ class HacmdAPI:
 					self.macro_dict[m] = cmds
 				else:
 					syslog.syslog(syslog.LOG_WARNING, "Error processing file %s. Line %d, Unrecognized: '%s'" % (filename,linenum,ln))
+					pass
 
 	def isop(self,op):
 		return self.cmd_dict.has_key(op)
@@ -146,7 +147,7 @@ if __name__ == "__main__":
 	import hapkg.haconfig
 
 	syslog.openlog("HacmdAPI",0,syslog.LOG_LOCAL0)
-	syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_INFO))
+	syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
 
 	config = hapkg.haconfig.Config()
 	config.readConfig("/etc/hahub/hahubd.conf")
@@ -159,5 +160,10 @@ if __name__ == "__main__":
 		if os.access(rcpath, os.R_OK):
 			syslog.syslog(syslog.LOG_INFO, "Reading conf from %s" % rcpath)
 			hacmdapi.readconf(rcpath)
+	clist = hacmdapi.oper_list()
+	for g in sorted(clist.keys()):
+		print "Group %s" % g
+		for c in sorted(clist[g]):
+			print "    %s" % c
 	cmdlist = sys.argv[1:]
 	hacmdapi.runlist(cmdlist,"at Top Level")
