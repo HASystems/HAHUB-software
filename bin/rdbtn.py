@@ -1,6 +1,16 @@
 #!/usr/bin/python
 
 import RPi.GPIO as gpio
+import signal
+import sys
+
+def cleanup(signum,frame):
+	gpio.cleanup()
+	sys.exit(0)
+
+signal.signal(signal.SIGINT, cleanup)
+signal.signal(signal.SIGTERM, cleanup)
+
 
 def wps_act(btn):
 	print "edge detected on WPS %d" % btn
