@@ -6,7 +6,7 @@ import os
 import sys
 import hapkg.haconfig
 
-syslog.openlog("HacmdAPI",0,syslog.LOG_LOCAL0)
+syslog.openlog("haexec",0,syslog.LOG_LOCAL0)
 syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
 
 config = hapkg.haconfig.Config()

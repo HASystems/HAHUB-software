@@ -1,13 +1,25 @@
 #!/usr/bin/python
 
 import RPi.GPIO as gpio
+import syslog
 import signal
 import sys
+import hapkg.haconfig
+
+syslog.openlog("rdbtn",0,syslog.LOG_LOCAL0)
+syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
+
+config = hapkg.haconfig.Config()
+config.readConfig("/etc/hahub/hahubd.conf")
+wps_btn = config.getConfigIntValue("WPS_BTN",17)
+func_btn = config.getConfigIntValue("FUNC_BTN",27)
+
+ind1_led = config.getConfigIntValue("HAHUBSTSLED1",5)
+ind2_led = config.getConfigIntValue("HAHUBSTSLED2",6)
 
 def cleanup(signum,frame):
 	gpio.cleanup()
 	sys.exit(0)
-
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
@@ -25,14 +37,14 @@ def func_act(btn):
 	gpio.output(6,rdval)
 
 gpio.setmode(gpio.BCM)
-gpio.setup(17, gpio.IN)
-gpio.setup(27, gpio.IN)
+gpio.setup(wps_btn, gpio.IN)
+gpio.setup(func_btn, gpio.IN)
 
-gpio.setup(5, gpio.OUT)
-gpio.setup(6, gpio.OUT)
+gpio.setup(ind1_led, gpio.OUT)
+gpio.setup(ind2_led, gpio.OUT)
 
-gpio.add_event_detect(17, gpio.BOTH, callback=wps_act)
-gpio.add_event_detect(27, gpio.BOTH, callback=func_act)
+gpio.add_event_detect(wps_btn, gpio.BOTH, callback=wps_act)
+gpio.add_event_detect(func_btn, gpio.BOTH, callback=func_act)
 
 while True:
 	pass
