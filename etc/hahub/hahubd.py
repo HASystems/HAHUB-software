@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import hapkg.haconfig
-import hapkg.haledops
+import hapkg.hagpioops
 import hapkg.haresponder
 import hapkg.hawifimon
 import syslog
@@ -13,7 +13,7 @@ import time
 
 
 # ###############################################################################
-# create all the utility objects - config, ledops, open syslog
+# create all the utility objects - config, gpioops, open syslog
 # ###############################################################################
 syslog.openlog("hahubd",0,syslog.LOG_LOCAL0)
 syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
@@ -21,16 +21,16 @@ syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
 config = hapkg.haconfig.Config()
 config.readConfig("/etc/hahub/hahubd.conf")
 
-ledops = hapkg.haledops.Ledops()
-ledops.setconfig(config)
-ledops.initLEDs()
+gpioops = hapkg.hagpioops.GPIOops()
+gpioops.setconfig(config)
+gpioops.initGPIOs()
 
 # ###############################################################################
 # Setup signal handler
 # ###############################################################################
 def cleanup(signum,frame):
 	syslog.syslog(syslog.LOG_CRIT,"Signal received ("+str(signum)+"). Terminating...")
-	ledops.cleanupLEDs()
+	gpioops.cleanupGPIOs()
 	sys.exit(0)
 
 signal.signal(signal.SIGINT, cleanup)
@@ -62,7 +62,7 @@ syslog.syslog(syslog.LOG_CRIT,"HAHUBD STARTED. PID: "+mypid)
 # ###############################################################################
 wifimon = hapkg.hawifimon.Wifimon()
 wifimon.setconfig(config)
-wifimon.setledops(ledops)
+wifimon.setgpioops(gpioops)
 twifi = threading.Thread(target=wifimon.run, name="WiFiMon")
 twifi.daemon = True
 twifi.start()
