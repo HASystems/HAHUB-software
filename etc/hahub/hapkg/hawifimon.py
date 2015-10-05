@@ -31,7 +31,8 @@ class Wifimon:
 
 	def restart_PBC(self):
 		self.lock.acquire()
-		subpriocess.call(["wpa_cli", "wps_pbc"])
+		syslog.syslog(syslog.LOG_INFO,"Restart_PBC called ....")
+		subprocess.call(["wpa_cli", "wps_pbc"])
 		self.lock.release()
 
 	def run(self):
@@ -63,14 +64,18 @@ class Wifimon:
 				if wifists == "INACTIVE":
 					badhlth = badhlth + defhlthinc
 					syslog.syslog(syslog.LOG_WARNING, wifists + ": Restarting PBC...")
-					restart_PBC()
+					self.restart_PBC()
 				elif wifists == "SCANNING":
+					syslog.syslog(syslog.LOG_WARNING, wifists)
 					badhlth = badhlth + defhlthinc
 				elif wifists == "ASSOCIATED":
+					syslog.syslog(syslog.LOG_WARNING, wifists)
 					badhlth = badhlth + defhlthinc
 				elif wifists == "ASSOCIATING":
+					syslog.syslog(syslog.LOG_WARNING, wifists)
 					badhlth = badhlth + defhlthinc
 				elif wifists == "DISCONNECTED":
+					syslog.syslog(syslog.LOG_WARNING, wifists)
 					badhlth = badhlth + defhlthinc
 				else:
 					syslog.syslog(syslog.LOG_WARNING, wifists + ": Unrecognized status found")

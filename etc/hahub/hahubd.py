@@ -63,6 +63,10 @@ syslog.syslog(syslog.LOG_CRIT,"HAHUBD STARTED. PID: "+mypid)
 wifimon = hapkg.hawifimon.Wifimon()
 wifimon.setconfig(config)
 wifimon.setgpioops(gpioops)
+def callback_restart_PBC(btn):
+	syslog.syslog(syslog.LOG_WARNING, "Responding to WPS button press")
+	wifimon.restart_PBC()
+gpioops.callback_wpsbtn_onrising(callback_restart_PBC)
 twifi = threading.Thread(target=wifimon.run, name="WiFiMon")
 twifi.daemon = True
 twifi.start()
