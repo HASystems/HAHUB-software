@@ -1,0 +1,18 @@
+----------------
+TODO
+----------------
+
+Valocate the WPS button function for osme more WiFi networks
+
+FInd out how to remove existing WiFi networks (added via WPS) via commandline
+
+Provide some visual feedback of WPS button actually getting pressed via perhaps an lED blinking or something
+
+generate compiled distribution of the full software
+
+complete the full write-up for installing and using the software
+
+----------------
+Completed
+----------------
+
