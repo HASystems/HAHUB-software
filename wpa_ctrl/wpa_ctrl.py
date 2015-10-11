@@ -73,4 +73,17 @@ if __name__ == "__main__":
 		print "wpa_cmd: Failed"
 	print info
 
+	# Tried it works 
+	# retval, info = wpa_ctrl.wpa_cmd("WPS_PBC")
+	# Few useful commands - not tried here, but they work with wpa_cli - should use strace to see what wpa_cli sends to wpa_supplicant
+	# retval, info = wpa_ctrl.wpa_cmd("ENABLE_NETWORK 0")
+	# retval, info = wpa_ctrl.wpa_cmd("DISABLE_NETWORK 1")
+	# retval, info = wpa_ctrl.wpa_cmd("REMOVE_NETWORK 1")
+
+	# print "Start PBC ..."
+	# retval, info = wpa_ctrl.wpa_cmd("WPS_PBC")
+	# if retval < 0:
+	# 	print "wpa_cmd: Failed"
+	# print info
+
 	wpa_ctrl.wpa_close()
