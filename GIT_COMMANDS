@@ -1,1 +1,6 @@
 git add -A
+git status
+git commit -m "comment message"
+git push origin master
+Username: atul.varshneya@gmail.com
+Password: renuatul123
