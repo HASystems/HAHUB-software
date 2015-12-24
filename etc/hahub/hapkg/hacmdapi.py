@@ -3,6 +3,7 @@
 import syslog
 import socket
 import time
+import string
 
 class HacmdAPI:
 
@@ -113,7 +114,14 @@ class HacmdAPI:
 
 	def runlist(self,cmdlist,tagtxt):
 		for opcmd in cmdlist:
-			if self.isop(opcmd):
+			cmdpar = string.split(opcmd,":",1)
+			if cmdpar[0] == "delay":
+				if cmdpar[1].isdigit():
+					nsecs = string.atoi(cmdpar[1])
+					if nsecs > 0:
+						print "Delaying "+cmdpar[1]+" seconds..."
+						time.sleep(nsecs)
+			elif self.isop(opcmd):
 				cmd =  self.expcmd(opcmd)
 				self.irsend(cmd)
 				time.sleep(0.5) # this is a hack ... seems U-Verse ignores if same command repeats quickly, e.g., 0 twice quickly

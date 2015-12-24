@@ -2,9 +2,11 @@
 TODO
 ----------------
 
-Valocate the WPS button function for osme more WiFi networks
+Make the LED operations as a separate thread service with APIs
 
-FInd out how to remove existing WiFi networks (added via WPS) via commandline
+Validate the WPS button function for some more WiFi networks
+
+Find out how to remove existing WiFi networks (added via WPS) via commandline
 
 Provide some visual feedback of WPS button actually getting pressed via perhaps an lED blinking or something
 
