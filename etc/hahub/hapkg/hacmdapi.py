@@ -116,11 +116,13 @@ class HacmdAPI:
 		for opcmd in cmdlist:
 			cmdpar = string.split(opcmd,":",1)
 			if cmdpar[0] == "delay":
-				if cmdpar[1].isdigit():
-					nsecs = string.atoi(cmdpar[1])
-					if nsecs > 0:
-						print "Delaying "+cmdpar[1]+" seconds..."
-						time.sleep(nsecs)
+				nsecs = 0
+				try:
+					nsecs = float(cmdpar[1])
+				except ValueError as msg:
+					syslog.syslog(syslog.LOG_WARNING, "Error in command: '%s'. (Running %s)." % (opcmd,tagtxt))
+				if nsecs > 0:
+					time.sleep(nsecs)
 			elif self.isop(opcmd):
 				cmd =  self.expcmd(opcmd)
 				self.irsend(cmd)
