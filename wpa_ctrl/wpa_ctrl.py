@@ -2,6 +2,7 @@
 
 import socket
 import os
+import string
 
 class Wpa_Ctrl:
 
@@ -44,6 +45,41 @@ class Wpa_Ctrl:
 
 		return 0, resp
 
+	def wpa_start_PBC(self):
+		retval, info = wpa_ctrl.wpa_cmd("WPS_PBC")
+		return retval, info
+
+	def wpa_clear_networks(self):
+		retval, info = wpa_ctrl.wpa_cmd("LIST_NETWORKS")
+		if retval < 0:
+			print info
+			return retval, info
+		nwlist = string.split(info,"\n")[1:]
+		allsuccess = True
+		for nw in nwlist:
+			nwpars = string.split(nw)
+			if len(nwpars) > 0:
+				nwid = nwpars[0]
+
+				discmd = "DISABLE_NETWORK %s" % nwid
+				retval, info = wpa_ctrl.wpa_cmd(discmd)
+				if retval < 0:
+					print "Error in  ", discmd
+					allsuccess = False
+
+				remcmd = "REMOVE_NETWORK %s" % nwid
+				retval, info = wpa_ctrl.wpa_cmd(remcmd)
+				if retval < 0:
+					print "Error in  ", remcmd
+					allsuccess = False
+		if allsuccess:
+			savcmd = "SAVE_CONFIG"
+			retval, info = wpa_ctrl.wpa_cmd(savcmd)
+			if retval < 0:
+				print "Error in  ", savcmd
+				return -1, "Error clearing networks. Config not changed"
+			else:
+				return 0, "Successfully cleared networks"
 
 if __name__ == "__main__":
 
@@ -57,6 +93,7 @@ if __name__ == "__main__":
 		print "wpa_cmd: Failed"
 	print info
 
+	print "List of networks -------"
 	retval, info = wpa_ctrl.wpa_cmd("LIST_NETWORKS")
 	if retval < 0:
 		print "wpa_cmd: Failed"
@@ -73,10 +110,18 @@ if __name__ == "__main__":
 		print "wpa_cmd: Failed"
 	print info
 
+	wpa_ctrl.wpa_close()
+
 	###########################################################################################
-	# Tried it, it works 
+	# Tried these, they work, at least for the success paths
+	#
+	# retval, info = wpa_ctrl.wpa_clear_networks()
+	# if retval < 0:
+	# 	print "wpa_cmd: Failed"
+	# print info
+	#
 	# print "Start PBC ..."
-	# retval, info = wpa_ctrl.wpa_cmd("WPS_PBC")
+	# wpa_ctrl.wpa_start_PBC()
 	# if retval < 0:
 	# 	print "wpa_cmd: Failed"
 	# print info
@@ -84,9 +129,6 @@ if __name__ == "__main__":
 	# Few useful commands - not tried here, but they work with wpa_cli - should use strace to see what wpa_cli sends to wpa_supplicant
 	# retval, info = wpa_ctrl.wpa_cmd("LIST_NETWORKS")
 	# retval, info = wpa_ctrl.wpa_cmd("ENABLE_NETWORK 0")
-	# retval, info = wpa_ctrl.wpa_cmd("DISABLE_NETWORK 1")
-	# retval, info = wpa_ctrl.wpa_cmd("REMOVE_NETWORK 1")
-	# retval, info = wpa_ctrl.wpa_cmd("SAVE_CONFIG")
 
 	# To get the status
 	# retval, info = wpa_ctrl.wpa_cmd("STATUS")
@@ -105,4 +147,3 @@ if __name__ == "__main__":
 	# so need to write code to pick out the "wpa_state" value to show the status via the LEDs
 	###########################################################################################
 
-	wpa_ctrl.wpa_close()
