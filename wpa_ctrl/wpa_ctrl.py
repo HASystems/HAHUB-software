@@ -73,17 +73,36 @@ if __name__ == "__main__":
 		print "wpa_cmd: Failed"
 	print info
 
-	# Tried it works 
-	# retval, info = wpa_ctrl.wpa_cmd("WPS_PBC")
-	# Few useful commands - not tried here, but they work with wpa_cli - should use strace to see what wpa_cli sends to wpa_supplicant
-	# retval, info = wpa_ctrl.wpa_cmd("ENABLE_NETWORK 0")
-	# retval, info = wpa_ctrl.wpa_cmd("DISABLE_NETWORK 1")
-	# retval, info = wpa_ctrl.wpa_cmd("REMOVE_NETWORK 1")
-
+	###########################################################################################
+	# Tried it, it works 
 	# print "Start PBC ..."
 	# retval, info = wpa_ctrl.wpa_cmd("WPS_PBC")
 	# if retval < 0:
 	# 	print "wpa_cmd: Failed"
 	# print info
+
+	# Few useful commands - not tried here, but they work with wpa_cli - should use strace to see what wpa_cli sends to wpa_supplicant
+	# retval, info = wpa_ctrl.wpa_cmd("LIST_NETWORKS")
+	# retval, info = wpa_ctrl.wpa_cmd("ENABLE_NETWORK 0")
+	# retval, info = wpa_ctrl.wpa_cmd("DISABLE_NETWORK 1")
+	# retval, info = wpa_ctrl.wpa_cmd("REMOVE_NETWORK 1")
+	# retval, info = wpa_ctrl.wpa_cmd("SAVE_CONFIG")
+
+	# To get the status
+	# retval, info = wpa_ctrl.wpa_cmd("STATUS")
+	# It returns a multi-line text in info:
+	#     Selected interface 'wlan0'
+	#     bssid=74:44:01:99:cc:04
+	#     ssid=RenuAtul-Library
+	#     id=0
+	#     mode=station
+	#     pairwise_cipher=CCMP
+	#     group_cipher=CCMP
+	#     key_mgmt=WPA2-PSK
+	#     wpa_state=COMPLETED
+	#     ip_address=192.168.0.109
+	#     address=00:13:ef:40:0b:b6
+	# so need to write code to pick out the "wpa_state" value to show the status via the LEDs
+	###########################################################################################
 
 	wpa_ctrl.wpa_close()
