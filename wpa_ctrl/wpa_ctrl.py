@@ -81,6 +81,27 @@ class Wpa_Ctrl:
 			else:
 				return 0, "Successfully cleared networks"
 
+	def wpa_get_state(self):
+		retval, info = wpa_ctrl.wpa_cmd("STATUS")
+		if retval < 0:
+			print info
+			return retval, info
+		stspars = string.split(info,"\n")
+		ssid = ""
+		wpa_state = ""
+		for par in stspars:
+			parpair = string.split(par,"=")
+			if len(parpair) > 1:
+				key,val = parpair[:2]
+				if key == "ssid":
+					ssid=val
+				if key == "wpa_state":
+					wpa_state = val
+		if len(wpa_state) > 0:
+			return 0, wpa_state
+		else:
+			return -1, "Error - wpa_state not found in the returned status"
+
 if __name__ == "__main__":
 
 	wpa_ctrl = Wpa_Ctrl()
@@ -88,28 +109,35 @@ if __name__ == "__main__":
 	if ret < 0:
 		print "Error in wpa_open()"
 
-	retval, info = wpa_ctrl.wpa_cmd("STATUS")
+	# retval, info = wpa_ctrl.wpa_cmd("STATUS")
+	# if retval < 0:
+	# 	print "wpa_cmd: Failed"
+	# print info
+
+	retval, info = wpa_ctrl.wpa_get_state()
 	if retval < 0:
 		print "wpa_cmd: Failed"
+	print "Looking up WPA STATE --"
 	print info
 
-	print "List of networks -------"
-	retval, info = wpa_ctrl.wpa_cmd("LIST_NETWORKS")
-	if retval < 0:
-		print "wpa_cmd: Failed"
-	print info
 
-	print "Scanning ..."
-	retval, info = wpa_ctrl.wpa_cmd("SCAN")
-	if retval < 0:
-		print "wpa_cmd: Failed"
-	print info
+	# print "List of networks -------"
+	# retval, info = wpa_ctrl.wpa_cmd("LIST_NETWORKS")
+	# if retval < 0:
+	# 	print "wpa_cmd: Failed"
+	# print info
 
-	retval, info = wpa_ctrl.wpa_cmd("SCAN_RESULTS")
-	if retval < 0:
-		print "wpa_cmd: Failed"
-	print info
+	# print "Scanning ..."
+	# retval, info = wpa_ctrl.wpa_cmd("SCAN")
+	# if retval < 0:
+	# 	print "wpa_cmd: Failed"
+	# print info
 
+	# retval, info = wpa_ctrl.wpa_cmd("SCAN_RESULTS")
+	# if retval < 0:
+	# 	print "wpa_cmd: Failed"
+	# print info
+   
 	wpa_ctrl.wpa_close()
 
 	###########################################################################################
@@ -129,21 +157,8 @@ if __name__ == "__main__":
 	# Few useful commands - not tried here, but they work with wpa_cli - should use strace to see what wpa_cli sends to wpa_supplicant
 	# retval, info = wpa_ctrl.wpa_cmd("LIST_NETWORKS")
 	# retval, info = wpa_ctrl.wpa_cmd("ENABLE_NETWORK 0")
-
-	# To get the status
-	# retval, info = wpa_ctrl.wpa_cmd("STATUS")
-	# It returns a multi-line text in info:
-	#     Selected interface 'wlan0'
-	#     bssid=74:44:01:99:cc:04
-	#     ssid=RenuAtul-Library
-	#     id=0
-	#     mode=station
-	#     pairwise_cipher=CCMP
-	#     group_cipher=CCMP
-	#     key_mgmt=WPA2-PSK
-	#     wpa_state=COMPLETED
-	#     ip_address=192.168.0.109
-	#     address=00:13:ef:40:0b:b6
-	# so need to write code to pick out the "wpa_state" value to show the status via the LEDs
+	# retval, info = wpa_ctrl.wpa_cmd("PING")
+	#
+	# REMEMBR to change the sock file location to under /var
 	###########################################################################################
 
