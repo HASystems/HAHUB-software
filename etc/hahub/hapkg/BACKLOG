@@ -1,0 +1,3 @@
+Need to test - have created a hawpactrl.py, have edited hawifimin.py to use iT
+Need to create LED status display as a separate service and change hawifimon.py to use that service
+	Check if any other place LEDs are being used, and fix it to use the LED status display service

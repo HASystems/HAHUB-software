@@ -1,30 +1,46 @@
 #!/usr/bin/python
 
+################################################################
+# WPA Control API
+# To be used in hawifimin.py for performing any control
+# actions for the wifi network management
+################################################################
+
 import socket
 import os
+import syslog
 import string
 
-class Wpa_Ctrl:
+class WpaCtrl:
 
 	def __init__(self):
 		self.srvr_addr = "/var/run/wpa_supplicant/wlan0"
-		# ctrl_addr_template = "/var/run/hahub/sock_wpa_ctrl_%d"
-		self.ctrl_addr_template = "/home/pi/dev/wpa_ctrl/sock_wpa_ctrl_%d"
+		# self.ctrl_addr_template = "/var/run/hahub/sock_wpa_ctrl_%d"
+		self.ctrl_addr_template = "/home/pi/dev/1.2client/sock_wpa_ctrl_%d"
 		self.ctrl_addr = self.ctrl_addr_template % os.getpid()
 		self.sock = None
 		self.isOpen = False
+		self.config = None
+
+	def setconfig(self, config):
+		self.config = config
+		# and read all the required config parameters here
+		self.srvr_addr = self.config.getConfValue("WPASRVEADDR","/var/run/wpa_supplicant/wlan0")
+		self.ctrl_addr_template = self.config.getConfValue("WPACTRLADDRTMPLT","/var/run/hahub/sock_wpa_ctrl_%d")
 
 	def wpa_open(self):
+		syslog.syslog(syslog.LOG_INFO, "Attempting to open socket connection to wpa_supplicant")
 		try:
 			if os.path.exists(self.ctrl_addr):
 				os.remove(self.ctrl_addr)
 			self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
 			self.sock.bind(self.ctrl_addr)
 		except socket.error, msg:
-			print "Error binding to local address %s" % msg
+			syslog.syslog(syslog.LOG_WARNING, "Error binding to local address %s" % msg)
 			os.remove(self.ctrl_addr)
 			return -1
 		self.isOpen = True
+		syslog.syslog(syslog.LOG_INFO, "Opened WPA socket connection to wpa_supplicant")
 		return 0
 
 	def wpa_close(self):
@@ -33,26 +49,28 @@ class Wpa_Ctrl:
 		self.isOpen = False
 
 	def wpa_cmd(self, cmd):
+		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % cmd)
 		if self.isOpen != True:
 			return -1, "Wpa_Ctrl connection not open. Call wpa_open() first."
 		try:
 			l = self.sock.sendto(cmd, self.srvr_addr)
 		except socket.error, msg:
-			errmsg = "Error sending to wpa_supplicant. %s" % msg
-			print errmsg
+			syslog.syslog(syslog.LOG_WARNING, "WPA command: <%s> failed with <%s>" % (cmd,msg))
 			return -1, errmsg
 		resp, srvr = self.sock.recvfrom(2048)
+		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s> successful" % cmd)
 
 		return 0, resp
 
 	def wpa_start_PBC(self):
-		retval, info = wpa_ctrl.wpa_cmd("WPS_PBC")
+		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % "wpa_start_PBC()")
+		retval, info = self.wpa_cmd("WPS_PBC")
 		return retval, info
 
 	def wpa_clear_networks(self):
-		retval, info = wpa_ctrl.wpa_cmd("LIST_NETWORKS")
+		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % "wpa_clear_networks()")
+		retval, info = self.wpa_cmd("LIST_NETWORKS")
 		if retval < 0:
-			print info
 			return retval, info
 		nwlist = string.split(info,"\n")[1:]
 		allsuccess = True
@@ -62,27 +80,28 @@ class Wpa_Ctrl:
 				nwid = nwpars[0]
 
 				discmd = "DISABLE_NETWORK %s" % nwid
-				retval, info = wpa_ctrl.wpa_cmd(discmd)
+				retval, info = self.wpa_cmd(discmd)
 				if retval < 0:
-					print "Error in  ", discmd
 					allsuccess = False
 
 				remcmd = "REMOVE_NETWORK %s" % nwid
-				retval, info = wpa_ctrl.wpa_cmd(remcmd)
+				retval, info = self.wpa_cmd(remcmd)
 				if retval < 0:
-					print "Error in  ", remcmd
 					allsuccess = False
 		if allsuccess:
+			syslog.syslog(syslog.LOG_INFO, "WPA command: <%s> saving config" % "wpa_clear_networks()")
 			savcmd = "SAVE_CONFIG"
-			retval, info = wpa_ctrl.wpa_cmd(savcmd)
+			retval, info = self.wpa_cmd(savcmd)
 			if retval < 0:
-				print "Error in  ", savcmd
+				syslog.syslog(syslog.LOG_WARNING, "WPA command: <%s> FAILED while saving config" % "wpa_clear_networks()")
 				return -1, "Error clearing networks. Config not changed"
 			else:
+				syslog.syslog(syslog.LOG_INFO, "WPA command: <%s> successful" % "wpa_clear_networks()")
 				return 0, "Successfully cleared networks"
 
 	def wpa_get_state(self):
-		retval, info = wpa_ctrl.wpa_cmd("STATUS")
+		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % "wpa_get_state()")
+		retval, info = self.wpa_cmd("STATUS")
 		if retval < 0:
 			print info
 			return retval, info
@@ -98,13 +117,15 @@ class Wpa_Ctrl:
 				if key == "wpa_state":
 					wpa_state = val
 		if len(wpa_state) > 0:
+			syslog.syslog(syslog.LOG_INFO, "WPA command: <%s> successful" % "wpa_get_state()")
 			return 0, wpa_state
 		else:
+			syslog.syslog(syslog.LOG_WARNING, "WPA command: <%s> FAILED" % "wpa_get_state()")
 			return -1, "Error - wpa_state not found in the returned status"
 
 if __name__ == "__main__":
 
-	wpa_ctrl = Wpa_Ctrl()
+	wpa_ctrl = WpaCtrl()
 	ret = wpa_ctrl.wpa_open()
 	if ret < 0:
 		print "Error in wpa_open()"
@@ -114,10 +135,16 @@ if __name__ == "__main__":
 	# 	print "wpa_cmd: Failed"
 	# print info
 
+	print "Clearing up all WiFi Networks--"
+	retval, info = wpa_ctrl.wpa_clear_networks()
+	if retval < 0:
+		print "wpa_cmd: Failed"
+	print info
+
+	print "Looking up WPA STATE --"
 	retval, info = wpa_ctrl.wpa_get_state()
 	if retval < 0:
 		print "wpa_cmd: Failed"
-	print "Looking up WPA STATE --"
 	print info
 
 
