@@ -11,8 +11,7 @@ class Wifimon:
 	def __init__(self):
 		self.go = True
 		self.lock = threading.Lock()
-		self.wpactrl = hawpactrl.WpaCtrl()
-		self.wpactrl.wpa_open()
+		self.wpactrl = None
 		pass
 
 	def setconfig(self, config):
@@ -44,6 +43,9 @@ class Wifimon:
 		wifipolltime = self.config.getConfigIntValue("WIFIPOLLTIME", 5)
 		defhlthinc = self.config.getConfigIntValue("DEFHLTHINC", 5)
 		maxhlthinc = self.config.getConfigIntValue("MAXHLTHINC", 15)
+
+		self.wpactrl = hawpactrl.WpaCtrl()
+		self.wpactrl.setconfig(self.config) 
 
 		badhlth = 0
 		while self.go:

@@ -25,8 +25,9 @@ class WpaCtrl:
 	def setconfig(self, config):
 		self.config = config
 		# and read all the required config parameters here
-		self.srvr_addr = self.config.getConfValue("WPASRVEADDR","/var/run/wpa_supplicant/wlan0")
-		self.ctrl_addr_template = self.config.getConfValue("WPACTRLADDRTMPLT","/var/run/hahub/sock_wpa_ctrl_%d")
+		self.srvr_addr = self.config.getConfigValue("WPASRVEADDR","/var/run/wpa_supplicant/wlan0")
+		self.ctrl_addr_template = self.config.getConfigValue("WPACTRLADDRTMPLT","/var/run/hahub/sock_wpa_ctrl_%d")
+		self.ctrl_addr = self.ctrl_addr_template % os.getpid()
 
 	def wpa_open(self):
 		syslog.syslog(syslog.LOG_INFO, "Attempting to open socket connection to wpa_supplicant")
@@ -36,7 +37,7 @@ class WpaCtrl:
 			self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
 			self.sock.bind(self.ctrl_addr)
 		except socket.error, msg:
-			syslog.syslog(syslog.LOG_WARNING, "Error binding to local address %s" % msg)
+			syslog.syslog(syslog.LOG_WARNING, "wpa_open() Error binding to local address %s" % msg)
 			os.remove(self.ctrl_addr)
 			return -1
 		self.isOpen = True
@@ -51,7 +52,9 @@ class WpaCtrl:
 	def wpa_cmd(self, cmd):
 		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % cmd)
 		if self.isOpen != True:
-			return -1, "Wpa_Ctrl connection not open. Call wpa_open() first."
+			retval = self.wpa_open()
+			if retval < 0:
+				return -1, "wpa_open() failed"
 		try:
 			l = self.sock.sendto(cmd, self.srvr_addr)
 		except socket.error, msg:
@@ -103,7 +106,6 @@ class WpaCtrl:
 		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % "wpa_get_state()")
 		retval, info = self.wpa_cmd("STATUS")
 		if retval < 0:
-			print info
 			return retval, info
 		stspars = string.split(info,"\n")
 		ssid = ""
