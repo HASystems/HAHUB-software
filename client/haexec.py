@@ -35,13 +35,22 @@ while True:
 
 	if len(cmdlist) == 0:
 		pass
-	elif cmdlist[0] =="list":
-		clist = hacmdapi.oper_list()
-		for g in sorted(clist.keys()):
-			print "Group %s" % g
-			for c in sorted(clist[g]):
-				print "    %s" % c
-	elif cmdlist[0] == "q":
-		exit()
 	else:
-		hacmdapi.runlist(cmdlist,"at Top Level")
+		for curcmd in cmdlist:
+			if curcmd.isdigit():
+				digcmd = []
+				for d in curcmd:
+					digcmd.append(d)
+				hacmdapi.runlist(digcmd,"at Top Level")
+			elif curcmd =="list":
+				clist = hacmdapi.oper_list()
+				for g in sorted(clist.keys()):
+					print "Group %s" % g
+					prline = ""
+					for c in sorted(clist[g]):
+						prline = prline + "    %s" % c
+					print prline
+			elif curcmd == "q":
+				exit()
+			else:
+				hacmdapi.runlist([curcmd],"at Top Level")
