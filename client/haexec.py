@@ -14,16 +14,34 @@ config.readConfig("/etc/hahub/hahubd.conf")
 
 hacmdapi = hapkg.hacmdapi.HacmdAPI()
 hacmdapi.setconfig(config)
+
+# read the command and macro definitions from *.rc files
 rcfiles = ["/etc/hahub/ha.rc", "~/.ha.rc", "./ha.rc", "~/bin/ha.rc"]
 for rc in rcfiles:
 	rcpath = os.path.expanduser(rc)
 	if os.access(rcpath, os.R_OK):
 		syslog.syslog(syslog.LOG_INFO, "Reading conf from %s" % rcpath)
 		hacmdapi.readconf(rcpath)
-clist = hacmdapi.oper_list()
-for g in sorted(clist.keys()):
-	print "Group %s" % g
-	for c in sorted(clist[g]):
-		print "    %s" % c
+
+# Run any commands given on the command line
 cmdlist = sys.argv[1:]
 hacmdapi.runlist(cmdlist,"at Top Level")
+
+# take and execute commands interactively
+while True:
+	sys.stdout.write("> ")
+	cmdline = sys.stdin.readline()
+	cmdlist = cmdline.split()
+
+	if len(cmdlist) == 0:
+		pass
+	elif cmdlist[0] =="list":
+		clist = hacmdapi.oper_list()
+		for g in sorted(clist.keys()):
+			print "Group %s" % g
+			for c in sorted(clist[g]):
+				print "    %s" % c
+	elif cmdlist[0] == "q":
+		exit()
+	else:
+		hacmdapi.runlist(cmdlist,"at Top Level")

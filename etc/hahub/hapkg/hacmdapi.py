@@ -7,6 +7,22 @@ import string
 
 class HacmdAPI:
 
+################################################################################
+# ha.rc file structure --
+# CMD    group:cmd renmote par1 par2 par3 ...
+# # Comment
+# MACRO  group:mac cmd1 cmd2 cmd3 ...
+################################################################################
+
+################################################################################
+# Data Structures:
+# cmd_dict[cmd]      <-- (remote, [par1, par2, par3, ...])
+# grp_dict[cmd/mac]  <-- grp
+# macro_dict[mac]    <-- [cmd1, cmd2, cmd3, ...]
+# 
+# grouped[grp]       <-- [cmd1, mac2, cmd3, cmd4, mac5, ...]
+################################################################################
+
 	def __init__(self):
 		self.cmd_dict = {}
 		self.macro_dict = {}
