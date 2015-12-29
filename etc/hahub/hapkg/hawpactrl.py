@@ -16,7 +16,7 @@ class WpaCtrl:
 	def __init__(self):
 		self.srvr_addr = "/var/run/wpa_supplicant/wlan0"
 		# self.ctrl_addr_template = "/var/run/hahub/sock_wpa_ctrl_%d"
-		self.ctrl_addr_template = "/home/pi/dev/1.2client/sock_wpa_ctrl_%d"
+		self.ctrl_addr_template = "/home/pi/dev/client/sock_wpa_ctrl_%d"
 		self.ctrl_addr = self.ctrl_addr_template % os.getpid()
 		self.sock = None
 		self.isOpen = False

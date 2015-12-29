@@ -1,0 +1,19 @@
+Setting up Watchdog
+-------------------
+To get watchdog up and running, you'll first need to:
+sudo modprobe bcm2708_wdog
+sudo vi /etc/modules
+# Add the line "bcm2708_wdog"
+
+Next you need watchdog, a daemon which does little more than send /dev/watchdog a heartbeat every 10 seconds. 
+It can also run arbitrary executables which do things like ping a server, and can trigger reboot when they fail.
+sudo apt-get install watchdog chkconfig
+chkconfig watchdog on
+sudo /etc/init.d/watchdog start
+
+You should also configure watchdog:
+sudo vi /etc/watchdog.conf
+
+Finally, test your watchdog. Make sure you've not got any crucial processes running and ensure you deactivate any swap partitions or files, then test your watchdog with a nasty forkbomb:
+: (){ :|:& };:
+This will ultimately cause a kernel panic and, if everything is set up correctly, your Pi will reboot a few seconds later.
