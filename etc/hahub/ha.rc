@@ -3,8 +3,8 @@
 # Depends on how the devices are connected (which controls audio, channels, etc.)
 #
 CMD Power:uvon		U-Verse KEY_POWER
-CMD Power:tvon		Sharp_Aquous KEY_POWER
-CMD Power:wtvon		westing.conf KEY_POWER
+CMD Power:tvon		Sharp-Aquous KEY_POWER
+CMD Power:wtvon		Westing KEY_POWER
 CMD Power:rcvron 	RX-V675 KEY_POWER
 CMD Scene:scntv 	RX-V675 KEY_TV
 CMD Scene:scndvd 	RX-V675 KEY_DVD
