@@ -8,15 +8,12 @@ class GPIOops:
 	def __init__(self):
 		self.hlthLED = 19
 		self.wstsLED = 13
-		self.hahubstsLED1 = 5
-		self.hahubstsLED2 = 6
+		self.stsLED1 = 5
+		self.stsLED2 = 6
 		self.wpsbtn = 17
 		self.funcbtn = 27
 		self.ledcmd = {}
 		self.ledpwr = {}
-
-	def setconfig(self, config):
-		self.config = config
 
 	def updateLEDs(self):
 		# P = Persistent on/off
@@ -44,11 +41,32 @@ class GPIOops:
 					pass
 			time.sleep(0.5)
 
+	def setLEDpwr(self, ledID, val):
+		gpio.output(ledID, val)
+
+
+	#########################################################################################
+	# This is the core API for external use 
+	# To use this module do the following
+	#
+	# import hagpioops
+	# ...
+	# gpioopsObj = hagpioops.GPIOops()
+	# gpioopsObj.setconfig(configObj)  # use the haconfig module to create this configObj
+	# gpioopsObj.initGPIOs()
+	# ...
+	# # ... and now use the other API functions of this module to perform the operations
+	#
+	#########################################################################################
+
+	def setconfig(self, config):
+		self.config = config
+
 	def initGPIOs(self):
 		self.hlthLED = self.config.getConfigIntValue("HLTHLED",19)
 		self.wstsLED = self.config.getConfigIntValue("WSTSLED",13)
-		self.hahubstsLED1 = self.config.getConfigIntValue("HAHUBSTSLED1",5)
-		self.hahubstsLED2 = self.config.getConfigIntValue("HAHUBSTSLED2",6)
+		self.stsLED1 = self.config.getConfigIntValue("HAHUBSTSLED1",5)
+		self.stsLED2 = self.config.getConfigIntValue("HAHUBSTSLED2",6)
 
 		self.wpsbtn = self.config.getConfigIntValue("WPS_BTN",17)
 		self.funcbtn = self.config.getConfigIntValue("FUNC_BTN",27)
@@ -58,37 +76,43 @@ class GPIOops:
 
 		gpio.setup(self.hlthLED, gpio.OUT)
 		gpio.setup(self.wstsLED, gpio.OUT)
-		gpio.setup(self.hahubstsLED1, gpio.OUT)
-		gpio.setup(self.hahubstsLED2, gpio.OUT)
+		gpio.setup(self.stsLED1, gpio.OUT)
+		gpio.setup(self.stsLED2, gpio.OUT)
 
 		gpio.setup(self.wpsbtn, gpio.IN)
 		gpio.setup(self.funcbtn, gpio.IN)
 
 		self.ledpwr[self.hlthLED] = False
 		self.ledpwr[self.wstsLED] = False
-		self.ledpwr[self.hahubstsLED1] = False
-		self.ledpwr[self.hahubstsLED2] = False
+		self.ledpwr[self.stsLED1] = False
+		self.ledpwr[self.stsLED2] = False
 
-		self.setLEDblink(self.hlthLED, 2)
-		self.setLEDblink(self.hahubstsLED1, 2)
-		self.setLEDblink(self.wstsLED, 2)
-		self.setLEDblink(self.hahubstsLED2, 2)
+		self.setLEDblink(self.hlthLED, 4)
+		self.setLEDblink(self.stsLED1, 4)
+		self.setLEDblink(self.wstsLED, 4)
+		self.setLEDblink(self.stsLED2, 4)
 
 		tleds = threading.Thread(target=self.updateLEDs, name="UpdateLEDs")
 		tleds.daemon = True
 		tleds.start()
 
-		time.sleep(4) # give time to 
+		# time.sleep(4) # give time to complete the blinking
 
+	#
+	# use this in callbacks to freeup the GPIO system from your app
+	#
 	def cleanupGPIOs(self):
 		gpio.cleanup()
 
-
-	def setLEDoff(self,ledID):
-		self.ledcmd[ledID] = ["P",False]
+	#########################################################################################
+	# This is API for LED operations if the LEDs IDs are known to the calling application
+	#########################################################################################
 
 	def setLEDon(self,ledID):
 		self.ledcmd[ledID] = ["P",True]
+
+	def setLEDoff(self,ledID):
+		self.ledcmd[ledID] = ["P",False]
 
 	def setLEDblink(self,ledID, num):
 		self.ledcmd[ledID] = ["B",num]
@@ -96,11 +120,10 @@ class GPIOops:
 	def setLEDtoggle(self,ledID):
 		self.ledcmd[ledID] = ["T",0]
 
-	def setLEDpwr(self,ledID, val):
-		gpio.output(ledID, val)
 
-
-
+	#########################################################################################
+	# This API abstracts the LED IDs through oppropriate function names
+	#########################################################################################
 
 	def hlthledon(self):
 		self.setLEDon(self.hlthLED)
@@ -108,14 +131,59 @@ class GPIOops:
 	def hlthledoff(self):
 		self.setLEDoff(self.hlthLED)
 
+	def hlthledblink(self):
+		self.setLEDblink(self.hlthLED)
+
+	def hlthledtoggle(self):
+		self.setLEDtoggle(self.hlthLED)
+
+
+
 	def wstsledon(self):
 		self.setLEDon(self.wstsLED)
 
 	def wstsledoff(self):
 		self.setLEDoff(self.wstsLED)
 
+	def wstsledblink(self):
+		self.setLEDblink(self.wstsLED)
+
+	def wstsledtoggle(self):
+		self.setLEDtoggle(self.wstsLED)
 
 
+
+	def stsLED1ledon(self):
+		self.setLEDon(self.stsLED1)
+
+	def stsLED1ledoff(self):
+		self.setLEDoff(self.stsLED1)
+
+	def stsLED1ledblink(self):
+		self.setLEDblink(self.stsLED1)
+
+	def stsLED1ledtoggle(self):
+		self.setLEDtoggle(self.stsLED1)
+
+
+
+	def stsLED2ledon(self):
+		self.setLEDon(self.stsLED2)
+
+	def stsLED2ledoff(self):
+		self.setLEDoff(self.stsLED2)
+
+	def stsLED2ledblink(self):
+		self.setLEDblink(self.stsLED2)
+
+	def stsLED2ledtoggle(self):
+		self.setLEDtoggle(self.stsLED2)
+
+
+
+	#########################################################################################
+	# This API is for registering callback functions for the two buttons on HAHUB board
+	#########################################################################################
 
 	def callback_wpsbtn_onrising(self, callback_fn):
 		gpio.add_event_detect(self.wpsbtn, gpio.RISING, callback=callback_fn)
@@ -153,15 +221,16 @@ if __name__ == "__main__":
 
 	gpioops.setLEDblink(gpioops.hlthLED,4)
 	gpioops.setLEDblink(gpioops.wstsLED,4)
-	gpioops.setLEDblink(gpioops.hahubstsLED1,4)
-	gpioops.setLEDblink(gpioops.hahubstsLED2,4)
+	gpioops.setLEDblink(gpioops.stsLED1,4)
+	gpioops.setLEDblink(gpioops.stsLED2,4)
 
 	def wps_falling(btnid):
-		gpio.output(gpioops.hahubstsLED1, True)
+		gpio.output(gpioops.stsLED1, True)
 	def wps_rising(btnid):
-		gpio.output(gpioops.hahubstsLED1, False)
+		gpio.output(gpioops.stsLED1, False)
 	gpioops.callback_wpsbtn_onfalling(wps_falling)
 	# gpioops.callback_wpsbtn_onrising(wps_rising)
 	time.sleep(10)
 
 	gpioops.cleanupGPIOs()
+	print "Exiting ..."
