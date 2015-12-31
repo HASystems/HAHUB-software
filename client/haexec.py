@@ -16,7 +16,7 @@ hacmdapi = hapkg.hacmdapi.HacmdAPI()
 hacmdapi.setconfig(config)
 
 # read the command and macro definitions from *.rc files
-rcfiles = ["/etc/hahub/ha.rc", "~/.ha.rc", "./ha.rc", "~/bin/ha.rc"]
+rcfiles = ["/etc/hahub/ha.rc", "~/.ha.rc", "~/bin/ha.rc", "./ha.rc"]
 for rc in rcfiles:
 	rcpath = os.path.expanduser(rc)
 	if os.access(rcpath, os.R_OK):
@@ -37,12 +37,7 @@ while True:
 		pass
 	else:
 		for curcmd in cmdlist:
-			if curcmd.isdigit():
-				digcmd = []
-				for d in curcmd:
-					digcmd.append(d)
-				hacmdapi.runlist(digcmd,"at Top Level")
-			elif curcmd =="list":
+			if curcmd =="list":
 				clist = hacmdapi.oper_list()
 				for g in sorted(clist.keys()):
 					print "Group %s" % g

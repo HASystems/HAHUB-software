@@ -146,6 +146,11 @@ class HacmdAPI:
 			elif self.ismacro(opcmd):
 				newcmdlist = self.expmacro(opcmd)
 				self.runlist(newcmdlist,opcmd)
+			elif opcmd.isdigit():
+				digcmd = []
+				for d in opcmd:
+					digcmd.append(d)
+				self.runlist(digcmd,"expanding "+opcmd)
 			else:
 				syslog.syslog(syslog.LOG_WARNING, "Undefined command: '%s'. (Running %s)." % (opcmd,tagtxt))
 
