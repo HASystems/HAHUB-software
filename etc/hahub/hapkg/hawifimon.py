@@ -14,11 +14,9 @@ class Wifimon:
 		self.wpactrl = None
 		pass
 
-	def setconfig(self, config):
-		self.config = config
-
-	def setgpioops(self, gpioops):
-		self.gpioops = gpioops
+	###############################################################################################
+	# For internal use. Wrapper functions for calling WPA command functions
+	###############################################################################################
 
 	def getwpastate(self):
 		retval, state = self.wpactrl.wpa_get_state()
@@ -34,6 +32,38 @@ class Wifimon:
 		if retval < 0:
 			syslog.syslog(syslog.LOG_CRIT,"Error starting PBC - %s" % info)
 		self.lock.release()
+
+	###############################################################################################
+	# Usage of this module:
+	# 
+	# import hawifimon
+	# ...
+	# wifimonObj = hawifimon.Wifimon()
+	# wifimonObj.setconfig(configObj)  # use the haconfig module to create this configObj
+	# wifimonObj.setgpioops(gpioopsObj)  # use the hagpioops module to create this gpioopsObj
+	# ...
+	# 
+	# # Now start the wifimon.run() function in a thread
+	# import threading
+	# twifi = threading.Thread(target=wifimonObj.run, name="WiFiMon")
+	# twifi.daemon = True
+	# twifi.start()
+	# 
+	###############################################################################################
+
+	###############################################################################################
+	# API to inject the config object and GPIOops object
+	###############################################################################################
+
+	def setconfig(self, config):
+		self.config = config
+
+	def setgpioops(self, gpioops):
+		self.gpioops = gpioops
+
+	###############################################################################################
+	# API for the main WiFi Monitoring thread
+	###############################################################################################
 
 	def run(self):
 		syslog.syslog(syslog.LOG_CRIT,"WIFIMON STARTED.")
