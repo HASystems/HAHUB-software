@@ -38,6 +38,7 @@ while True:
 	else:
 		for curcmd in cmdlist:
 			if curcmd =="list":
+				syslog.syslog(syslog.LOG_INFO, "Executong command; %s" % curcmd)
 				clist = hacmdapi.oper_list()
 				for g in sorted(clist.keys()):
 					print "Group %s" % g
@@ -46,6 +47,8 @@ while True:
 						prline = prline + "    %s" % c
 					print prline
 			elif curcmd == "q":
+				syslog.syslog(syslog.LOG_INFO, "Quitting")
 				exit()
 			else:
+				syslog.syslog(syslog.LOG_INFO, "Executong command; %s" % curcmd)
 				hacmdapi.runlist([curcmd],"at Top Level")
