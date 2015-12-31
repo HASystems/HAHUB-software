@@ -146,7 +146,7 @@ class HacmdAPI:
 			elif self.ismacro(opcmd):
 				newcmdlist = self.expmacro(opcmd)
 				self.runlist(newcmdlist,opcmd)
-			elif opcmd.isdigit():
+			elif opcmd.isdigit():  # makes sense to define CMDs for digit btns as digits, and it better UI to allow 1202 rather than 1 2 0 2
 				digcmd = []
 				for d in opcmd:
 					digcmd.append(d)
