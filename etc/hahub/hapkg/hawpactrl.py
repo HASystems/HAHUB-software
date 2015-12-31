@@ -22,6 +22,21 @@ class WpaCtrl:
 		self.isOpen = False
 		self.config = None
 
+
+	#########################################################################################
+	# This is the core API
+	# To use this module do the following
+	#
+	# import hawpactrl
+	# ...
+	# wpactrlObj = hawpactrl.GPIOops()
+	# wpactrlObj.setconfig(configObj)  # use the haconfig module to create this configObj
+	# wpactrlObj.wpa_open()
+	# ...
+	# # ... and now use the other API functions of this module to perform the operations
+	#
+	#########################################################################################
+
 	def setconfig(self, config):
 		self.config = config
 		# and read all the required config parameters here
@@ -44,10 +59,17 @@ class WpaCtrl:
 		syslog.syslog(syslog.LOG_INFO, "Opened WPA socket connection to wpa_supplicant")
 		return 0
 
+	#
+	# Use this to gracefully close the socket. Not using it will leave a socket file left behind.
+	#
 	def wpa_close(self):
 		self.sock.close()
 		os.remove(self.ctrl_addr)
 		self.isOpen = False
+
+	#########################################################################################
+	# This is a generic API for any wpa operation, it returns success/failure and information text
+	#########################################################################################
 
 	def wpa_cmd(self, cmd):
 		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % cmd)
@@ -65,10 +87,12 @@ class WpaCtrl:
 
 		return 0, resp
 
-	def wpa_start_PBC(self):
-		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % "wpa_start_PBC()")
-		retval, info = self.wpa_cmd("WPS_PBC")
-		return retval, info
+	#########################################################################################
+	# These are more macro level operations - 
+	# clear all registered wifi n/w
+	# start PBC
+	# get wifi connection state
+	#########################################################################################
 
 	def wpa_clear_networks(self):
 		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % "wpa_clear_networks()")
@@ -101,6 +125,11 @@ class WpaCtrl:
 			else:
 				syslog.syslog(syslog.LOG_INFO, "WPA command: <%s> successful" % "wpa_clear_networks()")
 				return 0, "Successfully cleared networks"
+
+	def wpa_start_PBC(self):
+		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % "wpa_start_PBC()")
+		retval, info = self.wpa_cmd("WPS_PBC")
+		return retval, info
 
 	def wpa_get_state(self):
 		syslog.syslog(syslog.LOG_INFO, "WPA command: <%s>" % "wpa_get_state()")
