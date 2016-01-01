@@ -24,6 +24,8 @@ CMD Channel:6		U-verse KEY_6
 CMD Channel:7		U-verse KEY_7
 CMD Channel:8		U-verse KEY_8
 CMD Channel:9		U-verse KEY_9
+CMD Arrows:exit		U-verse KEY_EXIT
+CMD Arrows:info		U-verse KEY_INFO
 CMD Arrows:OK		U-verse KEY_OK
 CMD Arrows:up		U-verse KEY_UP
 CMD Arrows:down		U-verse KEY_DOWN
