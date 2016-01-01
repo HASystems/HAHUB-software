@@ -7,21 +7,12 @@ import string
 
 class HacmdAPI:
 
-################################################################################
-# ha.rc file structure --
-# CMD    group:cmd renmote par1 par2 par3 ...
-# # Comment
-# MACRO  group:mac cmd1 cmd2 cmd3 ...
-################################################################################
-
-################################################################################
-# Data Structures:
-# cmd_dict[cmd]      <-- (remote, [par1, par2, par3, ...])
-# grp_dict[cmd/mac]  <-- grp
-# macro_dict[mac]    <-- [cmd1, cmd2, cmd3, ...]
-# 
-# grouped[grp]       <-- [cmd1, mac2, cmd3, cmd4, mac5, ...]
-################################################################################
+	################################################################################
+	# Data Structures:
+	# cmd_dict[cmd]      <-- (remote, [par1, par2, par3, ...])
+	# grp_dict[cmd/mac]  <-- grp
+	# macro_dict[mac]    <-- [cmd1, cmd2, cmd3, ...]
+	################################################################################
 
 	def __init__(self):
 		self.cmd_dict = {}
@@ -29,9 +20,109 @@ class HacmdAPI:
 		self.grp_dict = {}
 		self.defgrp = "Ungrouped"
 
+	def isop(self,op):
+		return self.cmd_dict.has_key(op)
+
+	def ismacro(self,m):
+		return self.macro_dict.has_key(m)
+
+	def expmacro(self,m):
+		return self.macro_dict[m]
+
+	def expcmd(self,op):
+		rem,pars = self.cmd_dict[op]
+		cmd = "SEND_ONCE " + rem 
+		pstr = ""
+		for p in pars:
+			pstr = pstr + " " + p
+		cmd = cmd + pstr
+		return cmd
+
+	#
+	# runs the protocol with the LIRC daemon to transmit the command, and receive the response
+	# socket is opened and closed each time to avoid any possible 'left over' from the previous command
+	#
+	def irsend(self,cmd,sim=False):
+		if sim:
+			syslog.syslog(syslog.LOG_INFO, "irsend: Simulating Command: " + cmd)
+			return 0
+
+		s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+		srvr_addr = self.config.getConfigValue("LIRCDSOCK", "/var/run/lirc/lircd")
+		try:
+			s.connect(srvr_addr)
+		except socket.error, msg:
+			syslog.syslog(syslog.LOG_CRIT,"Error writing to LIRCD socket. %s" % msg)
+			return -1
+
+		try:
+			s.sendall(cmd + "\n")
+			f = s.makefile()
+			state = 0 # wait for BEGIN
+			while True:
+				ln  = (f.readline()).rstrip('\n')
+				if state == 0 and ln == 'BEGIN':
+					state = 1 # wait for readback the command
+				elif state == 1:
+					# this line is the command, so just ignore it
+					state = 2 # wait for result
+				elif state == 2:
+					if ln == "SUCCESS":
+						# print "Success"
+						state = 9 # wait for END
+					if ln == "ERROR":
+						# print "I see error"
+						state = 3 # wait for DATA
+				elif state == 3 and ln == "DATA":
+					state = 4 # wait for count of error data lines
+				elif state == 4:
+					c = int(ln)
+					for i in range(c):
+						syslog.syslog(syslog.LOG_WARNING, "Error: %s" % (f.readline()).rstrip('\n'))
+					state = 9 # wait for END
+				elif state == 9 and ln == 'END':
+					break
+				else:
+					syslog.syslog(syslog.LOG_WARNING, "Unexpected RESPONSE from LIRCD: %s" % ln)
+					break
+		finally:
+			s.close
+		return 0
+
+	################################################################################
+	# API for applications -
+	#     setconfig(configObj)  - this is for future, currently no config info is used
+	#     readconf(rcfilename)
+	#     oper_list()
+	#
+	# To use this module
+	# import hacmdapi
+	# ...
+	# cmdapiObj = hacmdapi.HacmdAPI()
+	# cmdapiObj.setconfig(configObj)  # use the haconfig module to create this configObj
+	# ...
+	# cmdapiObj.readconf(rcfile1path)
+	# cmdapiObj.readconf(rcfile2path)
+	# cmdapiObj.readconf(rcfile3path)
+	# ...
+	# # ... and now use the other API functions of this module to perform the operations
+	# cmdapiObj.runlist(CMD_MACRO_list, "at Top Level")
+	# grouped_cmdlist = cmdapiObj.oper_list()
+	# ...
+	################################################################################
+
 	def setconfig(self, config):
 		self.config = config
 
+	#
+	# reads run commands files which defines the user commands and macros.
+	# Can be called multiple times to consolidate definitions from multiple rc files
+	#
+	# ha.rc file structure --
+	# CMD    group:cmd renmote par1 par2 par3 ...
+	# # Comment
+	# MACRO  group:mac cmd1 cmd2 cmd3 ...
+	#
 	def readconf(self,filename):
 		f = open(filename,"r")
 		linenum = 0
@@ -63,71 +154,10 @@ class HacmdAPI:
 					syslog.syslog(syslog.LOG_WARNING, "Error processing file %s. Line %d, Unrecognized: '%s'" % (filename,linenum,ln))
 					pass
 
-	def isop(self,op):
-		return self.cmd_dict.has_key(op)
-
-	def ismacro(self,m):
-		return self.macro_dict.has_key(m)
-
-	def expmacro(self,m):
-		return self.macro_dict[m]
-
-	def expcmd(self,op):
-		rem,pars = self.cmd_dict[op]
-		cmd = "SEND_ONCE " + rem 
-		pstr = ""
-		for p in pars:
-			pstr = pstr + " " + p
-		cmd = cmd + pstr
-		return cmd
-
-	def irsend(self,cmd,sim=False):
-		if sim:
-			syslog.syslog(syslog.LOG_INFO, "irsend: Simulating Command: " + cmd)
-			return 0
-
-		s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-		srvr_addr = self.config.getConfigValue("LIRCDSOCK", "/var/run/lirc/lircd")
-		try:
-			s.connect(srvr_addr)
-		except socket.error, msg:
-			syslog.syslog(syslog.LOG_CRIT,"Error writing to LIRCD socket. %s" % msg)
-			return -1
-
-		try:
-			s.sendall(cmd + "\n")
-			f = s.makefile()
-			state = 0 # wait BEGIN
-			while True:
-				ln  = (f.readline()).rstrip('\n')
-				if state == 0 and ln == 'BEGIN':
-					state = 1 # wait readback the command
-				elif state == 1:
-					# this line is the command, so just ignore it
-					state = 2 # wait for result
-				elif state == 2:
-					if ln == "SUCCESS":
-						# print "Success"
-						state = 9 # wait END
-					if ln == "ERROR":
-						# print "I see error"
-						state = 3 # wait DATA
-				elif state == 3 and ln == "DATA":
-					state = 4 # wait count of error data liner
-				elif state == 4:
-					c = int(ln)
-					for i in range(c):
-						syslog.syslog(syslog.LOG_WARNING, "Error: %s" % (f.readline()).rstrip('\n'))
-					state = 9 # wait END
-				elif state == 9 and ln == 'END':
-					break
-				else:
-					syslog.syslog(syslog.LOG_WARNING, "Unexpected RESPONSE from LIRCD: %s" % ln)
-					break
-		finally:
-			s.close
-		return 0
-
+	#
+	# instead of having a function for running 1 command, the function takes and runs a list of commands
+	# 'tagtext' is used in the log file entries to indicate the macro being expanded
+	#
 	def runlist(self,cmdlist,tagtxt):
 		for opcmd in cmdlist:
 			cmdpar = string.split(opcmd,":",1)
@@ -154,6 +184,10 @@ class HacmdAPI:
 			else:
 				syslog.syslog(syslog.LOG_WARNING, "Undefined command: '%s'. (Running %s)." % (opcmd,tagtxt))
 
+	# 
+	# the returned data structure
+	# grouped[grp]       <-- [cmd1, mac2, cmd3, cmd4, mac5, ...]
+	#
 	def oper_list(self):
 		grouped = {}
 		for op in self.cmd_dict.keys():

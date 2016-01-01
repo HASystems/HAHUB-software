@@ -8,6 +8,31 @@ class Responder:
 	def __init__(self):
 		self.go = True
 
+	#########################################################################################
+	# This responds to broadcast query messages send on REQ_BCASTPORT (default 50001)
+	# The response structure is text
+	#	PRODUCT=<PRODUCT>
+	#   VERSION=<VERSION>
+	#   HTTPPORT=<HTTPPORT>
+	#   UTC=repr(time.time())
+	# all the <> are substituted by the values for those keynames from the config info
+	#
+	# To use this module do the following
+	#
+	# import haresponder
+	# ...
+	# respObj = haresponder.Responder()
+	# respObj.setconfig(configObj)  # use the haconfig module to create this configObj
+	# ...
+	# 
+	# # Now start the respObj.run() function in a thread
+	# import threading
+	# tresp = threading.Thread(target=respObj.run, name="Responder")
+	# tresp.daemon = True
+	# tresp.start()
+	#
+	#########################################################################################
+
 	def setconfig(self, config):
 		self.config = config
 

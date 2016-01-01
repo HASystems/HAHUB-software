@@ -22,21 +22,25 @@ class Config:
 	#
 	# API Functions --
 	#
-	# readconfig() 
-	#         Takes as a parameter a config filename. As of current implementation it should be 
-	#         called only once for one config object. Easy to change to support multiple calls 
-	#         each adding/overwriting config parameter values.
+	# readconfig(conffilename) 
+	#         Takes as a parameter a config filename.
+	#         As of current implementation it should be called only once for one config object.
+	#         Easy to change to support multiple calls each adding/overwriting config parameter values.
 	#
-	# getConfigValue(key, default_value) - returns a string value for the key.
+	# getConfigValue(key, default_value) 
+	#         Returns a string value for the key.
 	#         default_value must be a string. It is returned if key name is not found.
 	# 
-	# getConfigInt(key, default_value) - returns an integer value for the key.
+	# getConfigInt(key, default_value) 
+	#         Returns an integer value for the key.
 	#         default_value must be an integer. It is returned if key name is not found.
 	# 
-	# getConfigFloat(key, default_value) - returns a floating point value for the key.
+	# getConfigFloat(key, default_value) 
+	#         Returns a floating point value for the key.
 	#         default_value must be a floating point number. It is returned if key name is not found.
 	# 
-	# setConfigValue(key, value) - makes an entry of this pair in the config object.
+	# setConfigValue(key, value) 
+	#         Makes an entry of this pair in the config object.
 	#         Does NOT make this entry in the config file. Just a maeans to share
 	#         this new pair with other modules. This function is not used often.
 	####################################################################################

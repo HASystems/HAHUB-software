@@ -18,6 +18,7 @@ class GPIOops:
 	def updateLEDs(self):
 		# P = Persistent on/off
 		# B = Blink a count number of times, then off
+		# T = Toggle (blink) indefinitely till another command
 		while True:
 			for ledID in self.ledcmd.keys():
 				cat,val = self.ledcmd[ledID]
@@ -122,7 +123,7 @@ class GPIOops:
 
 
 	#########################################################################################
-	# This API abstracts the LED IDs through oppropriate function names
+	# This API abstracts the LED IDs through appropriate function names
 	#########################################################################################
 
 	def hlthledon(self):
@@ -131,8 +132,8 @@ class GPIOops:
 	def hlthledoff(self):
 		self.setLEDoff(self.hlthLED)
 
-	def hlthledblink(self):
-		self.setLEDblink(self.hlthLED)
+	def hlthledblink(self,num):
+		self.setLEDblink(self.hlthLED, num)
 
 	def hlthledtoggle(self):
 		self.setLEDtoggle(self.hlthLED)
@@ -145,8 +146,8 @@ class GPIOops:
 	def wstsledoff(self):
 		self.setLEDoff(self.wstsLED)
 
-	def wstsledblink(self):
-		self.setLEDblink(self.wstsLED)
+	def wstsledblink(self, num):
+		self.setLEDblink(self.wstsLED, num)
 
 	def wstsledtoggle(self):
 		self.setLEDtoggle(self.wstsLED)
@@ -159,8 +160,8 @@ class GPIOops:
 	def stsLED1ledoff(self):
 		self.setLEDoff(self.stsLED1)
 
-	def stsLED1ledblink(self):
-		self.setLEDblink(self.stsLED1)
+	def stsLED1ledblink(self, num):
+		self.setLEDblink(self.stsLED1, num)
 
 	def stsLED1ledtoggle(self):
 		self.setLEDtoggle(self.stsLED1)
@@ -173,8 +174,8 @@ class GPIOops:
 	def stsLED2ledoff(self):
 		self.setLEDoff(self.stsLED2)
 
-	def stsLED2ledblink(self):
-		self.setLEDblink(self.stsLED2)
+	def stsLED2ledblink(self, num):
+		self.setLEDblink(self.stsLED2, num)
 
 	def stsLED2ledtoggle(self):
 		self.setLEDtoggle(self.stsLED2)
