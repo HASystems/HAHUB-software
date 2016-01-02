@@ -8,7 +8,7 @@ class Responder:
 	def __init__(self):
 		self.go = True
 
-	#########################################################################################
+	############################################################################################################
 	# This responds to broadcast query messages send on REQ_BCASTPORT (default 50001)
 	# The response structure is text
 	#	PRODUCT=<PRODUCT>
@@ -31,7 +31,17 @@ class Responder:
 	# tresp.daemon = True
 	# tresp.start()
 	#
-	#########################################################################################
+	############################################################################################################
+	# Configuration Information
+	#   Key					Default value					Type		Comment
+	#	----------------	----------------				--------	-------------------------
+	#	PRODUCT				HAHUB							String		Product name to broadcast
+	#	VERSION				1.3								String		Version name to broadcast
+	#	HTTPPORT			5000							String		HTTP port to broadcast (as string)
+	#	RES_BCASTPORT		50000							Integer		Port # to broadcast response
+	#	REQ_BCASTPORT		50001							Integer		Port # to receive request
+	#
+	############################################################################################################
 
 	def setconfig(self, config):
 		self.config = config

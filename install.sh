@@ -49,9 +49,9 @@ fi
 
 echo "Removing old $BINDIR files..."
 rm -rf $BINDIR/*
-echo "Copying latest ~/bin files..."
+echo "Copying latest ${SDIR}/bin files to $BINDIR ..."
 cp -r $SDIR/bin/* $BINDIR
-echo "Copying latest ~/client files..."
+echo "Copying latest ${SDIR}/client files to $BINDIR ..."
 cp -r $SDIR/client/* $BINDIR
 
 echo "Copying rc.local to /etc/rc.local..."
@@ -59,12 +59,12 @@ cp -r $SDIR/etc/rc.local /etc/rc.local
 
 echo "Removing old $ETCDIR files..."
 rm -rf $ETCDIR/*
-echo "Copying files to $ETCDIR ..."
+echo "Copying files from ${SDIR}/etc/hahub to $ETCDIR ..."
 cp -r $SDIR/etc/hahub/* $ETCDIR
 
 echo "Removing old $LIBDIR files..."
 rm -rf $LIBDIR/*
-echo "Copying files to $LIBDIR ..."
+echo "Copying files from ${SDIR}/halib to $LIBDIR ..."
 cp -r $SDIR/halib/* $LIBDIR
 
 echo "Done"

@@ -46,7 +46,7 @@ class GPIOops:
 		gpio.output(ledID, val)
 
 
-	#########################################################################################
+	############################################################################################################
 	# This is the core API for external use 
 	# To use this module do the following
 	#
@@ -58,7 +58,18 @@ class GPIOops:
 	# ...
 	# # ... and now use the other API functions of this module to perform the operations
 	#
-	#########################################################################################
+	############################################################################################################
+	# Configuration Information
+	#   Key					Default value					Type		Comment
+	#	----------------	----------------				--------	-------------------------
+	#	HLTHLED				19								Integer		GPIO # of Health LED
+	#	WSTSLED				13								Integer		GPIO # of WiFi status LED
+	#	HAHUBSTSLED1		5								Integer		GPIO # of Status 1 LED
+	#	HAHUBSTSLED2		6								Integer		GPIO # of Status 2 LED
+	#	WPS_BTN				17								Integer		GPIO # of WPS button
+	#	FUNC_BTN			27								Integer		GPIO # of FUNC button
+	#
+	############################################################################################################
 
 	def setconfig(self, config):
 		self.config = config

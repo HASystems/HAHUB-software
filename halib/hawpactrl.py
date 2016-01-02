@@ -23,7 +23,7 @@ class WpaCtrl:
 		self.config = None
 
 
-	#########################################################################################
+	############################################################################################################
 	# This is the core API
 	# To use this module do the following
 	#
@@ -35,7 +35,14 @@ class WpaCtrl:
 	# ...
 	# # ... and now use the other API functions of this module to perform the operations
 	#
-	#########################################################################################
+	############################################################################################################
+	# Configuration Information
+	#   Key					Default value					Type		Comment
+	#	----------------	----------------------------	--------	-------------------------
+	#	WPASRVEADDR			/var/run/wpa_supplicant/wlan0	String		Server Socket address for wpa_supplicant
+	#	WPACTRLADDRTMPLT	/var/run/hahub/sock_wpa_ctrl_%d	String		Client socket address. %d gets pid
+	#
+	############################################################################################################
 
 	def setconfig(self, config):
 		self.config = config

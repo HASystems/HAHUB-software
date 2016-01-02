@@ -33,7 +33,7 @@ class Wifimon:
 			syslog.syslog(syslog.LOG_CRIT,"Error starting PBC - %s" % info)
 		self.lock.release()
 
-	###############################################################################################
+	############################################################################################################
 	# Usage of this module:
 	# 
 	# import hawifimon
@@ -49,7 +49,17 @@ class Wifimon:
 	# twifi.daemon = True
 	# twifi.start()
 	# 
-	###############################################################################################
+	############################################################################################################
+	# Configuration Information
+	#   Key					Default value		Type		Comment
+	#	----------------	----------------	--------	-------------------------
+	#	WIFIPOLLTIME		5					Integer		Polling interval to check WiFi status (# seconds)
+	#	DEFHLTHINC			5					Integer		Number to add to error counter on each NORMAL error
+	#	MAXHLTHINC			15					Integer		Number to add to error counter on each UNEXPECTED error
+	#	WARNBADHLTH			90					Integer		Threshold of error count implying BAD health
+	#	CRITBADHLTH			120					Integer		Threshold of error count implying CRITICAL health
+	#
+	############################################################################################################
 
 	###############################################################################################
 	# API to inject the config object and GPIOops object

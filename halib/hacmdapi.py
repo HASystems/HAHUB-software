@@ -89,7 +89,7 @@ class HacmdAPI:
 			s.close
 		return 0
 
-	################################################################################
+	############################################################################################################
 	# API for applications -
 	#     setconfig(configObj)  - this is for future, currently no config info is used
 	#     readconf(rcfilename)
@@ -109,7 +109,13 @@ class HacmdAPI:
 	# cmdapiObj.runlist(CMD_MACRO_list, "at Top Level")
 	# grouped_cmdlist = cmdapiObj.oper_list()
 	# ...
-	################################################################################
+	############################################################################################################
+	# Configuration Information
+	#   Key					Default value					Type		Comment
+	#	----------------	----------------------------	--------	-------------------------
+	#	LIRCDSOCK			/var/run/lirc/lircd				String		Socket address for LIRC daemon
+	#
+	############################################################################################################
 
 	def setconfig(self, config):
 		self.config = config
