@@ -2,7 +2,7 @@
 
 
 SDIR=$(dirname $0)
-BINDIR=~pi/bin
+BINDIR=~/bin
 ETCDIR=/etc/hahub
 LIBDIR=/usr/local/lib/hahub
 VARLOGDIR=/var/log/hahub
