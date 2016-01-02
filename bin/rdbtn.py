@@ -4,12 +4,12 @@ import RPi.GPIO as gpio
 import syslog
 import signal
 import sys
-import hapkg.haconfig
+import haconfig
 
 syslog.openlog("rdbtn",0,syslog.LOG_LOCAL0)
 syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
 
-config = hapkg.haconfig.Config()
+config = haconfig.Config()
 config.readConfig("/etc/hahub/hahubd.conf")
 wps_btn = config.getConfigIntValue("WPS_BTN",17)
 func_btn = config.getConfigIntValue("FUNC_BTN",27)

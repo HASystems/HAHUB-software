@@ -1,18 +1,18 @@
 #!/usr/bin/python
 
 import syslog
-import hapkg.hacmdapi
+import hacmdapi
 import os
 import sys
-import hapkg.haconfig
+import haconfig
 
 syslog.openlog("haexec",0,syslog.LOG_LOCAL0)
 syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
 
-config = hapkg.haconfig.Config()
+config = haconfig.Config()
 config.readConfig("/etc/hahub/hahubd.conf")
 
-hacmdapi = hapkg.hacmdapi.HacmdAPI()
+hacmdapi = hacmdapi.HacmdAPI()
 hacmdapi.setconfig(config)
 
 # read the command and macro definitions from *.rc files

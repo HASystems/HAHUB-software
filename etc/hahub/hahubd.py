@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-import hapkg.haconfig
-import hapkg.hagpioops
-import hapkg.haresponder
-import hapkg.hawifimon
+import haconfig
+import hagpioops
+import haresponder
+import hawifimon
 import syslog
 import threading
 import signal
@@ -18,10 +18,10 @@ import time
 syslog.openlog("hahubd",0,syslog.LOG_LOCAL0)
 syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
 
-config = hapkg.haconfig.Config()
+config = haconfig.Config()
 config.readConfig("/etc/hahub/hahubd.conf")
 
-gpioops = hapkg.hagpioops.GPIOops()
+gpioops = hagpioops.GPIOops()
 gpioops.setconfig(config)
 gpioops.initGPIOs()
 
@@ -60,7 +60,7 @@ syslog.syslog(syslog.LOG_CRIT,"HAHUBD STARTED. PID: "+mypid)
 # ###############################################################################
 # Start the WiFiMon thread
 # ###############################################################################
-wifimon = hapkg.hawifimon.Wifimon()
+wifimon = hawifimon.Wifimon()
 wifimon.setconfig(config)
 wifimon.setgpioops(gpioops)
 def callback_restart_PBC(btn):
@@ -74,7 +74,7 @@ twifi.start()
 # ###############################################################################
 # Start the responder thread
 # ###############################################################################
-responder = hapkg.haresponder.Responder()
+responder = haresponder.Responder()
 responder.setconfig(config)
 tresp = threading.Thread(target=responder.run, name="Responder")
 tresp.daemon = True
