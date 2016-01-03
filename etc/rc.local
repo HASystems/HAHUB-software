@@ -20,4 +20,7 @@ fi
 # start HA-Hub's wifimon
 /etc/hahub/start-hahub
 
+# start HA-Hub's web-server
+/etc/hahub/start-haweb
+
 exit 0

@@ -2,7 +2,7 @@
 
 export PYTHONPATH=/usr/local/lib/hahub
 
-echo "Starting HAHUB daemon..."
+echo "Starting HAWEB daemon..."
 if [ ! -d /var/run/hahub ]
 then
 	echo "Creating /var/run/hahub directory..."
@@ -15,12 +15,12 @@ then
 	mkdir /var/log/hahub
 fi
 
-if [ -e /var/log/hahub/hahub-nohup.out ]
+if [ -e /var/log/hahub/haweb-nohup.out ]
 then
-	echo "Saving old hahub-nohup.out..."
-	mv /var/log/hahub/hahub-nohup.out /var/log/hahub/hahub-nohup.out.old
+	echo "Saving old haweb-nohup.out..."
+	mv /var/log/hahub/haweb-nohup.out /var/log/hahub/haweb-nohup.out.old
 fi
 
-nohup /etc/hahub/hahubd.py > /var/log/hahub/hahub-nohup.out &
+nohup /etc/hahub/webapp.py > /var/log/hahub/haweb-nohup.out &
 
 exit 0

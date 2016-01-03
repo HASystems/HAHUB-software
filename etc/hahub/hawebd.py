@@ -6,27 +6,29 @@ import hacmdapi
 
 app = Flask(__name__)
 
-@app.route('/hacmdapi/v1.3/tasks/<task_id>', methods=['GET'])
-def get_task(task_id):
+@app.route('/hacmdHTML/v1.3/commands/<command_id>', methods=['GET'])
+def run_command(command_id):
 	global cmdapi
 	global lastcmd
-	syslog.syslog(syslog.LOG_INFO, "Command - %s" % task_id)
-	print "Command - %s" % task_id
-	cmdapi.runlist([task_id],"at Top Level")
-	lastcmd = task_id
-	# return render_template('cmdhome.html', commands=sortedcmds(cmdapi.oper_list()))
-	return redirect('/hacmdapi/v1.3/tasks/', code=302)
+	syslog.syslog(syslog.LOG_INFO, "Command - %s" % command_id)
+	cmdapi.runlist([command_id],"at Top Level")
+	lastcmd = command_id
+	return redirect('/hacmdHTML/v1.3/commands/', code=302)
 
-@app.route('/hacmdapi/v1.3/tasks/', methods=['GET'])
-@app.route('/')
-def index():
+@app.route('/hacmdHTML/v1.3/commands/', methods=['GET'])
+def get_commands():
 	global cmdapi
 	global lastcmd
 	syslog.syslog(syslog.LOG_INFO, "Home Page")
-	print "Home Page"
 	return render_template('cmdhome.html', commands=sortedcmds(cmdapi.oper_list()), lastone=lastcmd)
 
-@app.route('/hacmdapi/v1.3/test/', methods=['GET'])
+@app.route('/')
+def index():
+	syslog.syslog(syslog.LOG_INFO, "Home Page")
+	return render_template('hacmdHTML.html')
+
+
+@app.route('/hacmdHTML/v1.3/test/', methods=['GET'])
 def test_page():
 	global cmdapi
 	syslog.syslog(syslog.LOG_INFO, "Test Page")
@@ -89,4 +91,4 @@ for rc in rcfiles:
 # ###############################################################################
 lastcmd = "None"
 httpport = config.getConfigIntValue("HTTPPORT", 8080)
-app.run(host='0.0.0.0', port=httpport, debug=True)
+app.run(host='0.0.0.0', port=httpport, debug=False)
