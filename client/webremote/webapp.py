@@ -1,6 +1,6 @@
 import os
 import syslog
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 import haconfig
 import hacmdapi
 
@@ -9,9 +9,11 @@ app = Flask(__name__)
 @app.route('/hacmdapi/v1.3/tasks/<task_id>', methods=['GET'])
 def get_task(task_id):
 	global cmdapi
+	global lastcmd
 	syslog.syslog(syslog.LOG_INFO, "Command - %s" % task_id)
 	print "Command - %s" % task_id
 	cmdapi.runlist([task_id],"at Top Level")
+	lastcmd = task_id
 	# return render_template('cmdhome.html', commands=sortedcmds(cmdapi.oper_list()))
 	return redirect('/hacmdapi/v1.3/tasks/', code=302)
 
@@ -19,9 +21,10 @@ def get_task(task_id):
 @app.route('/')
 def index():
 	global cmdapi
+	global lastcmd
 	syslog.syslog(syslog.LOG_INFO, "Home Page")
 	print "Home Page"
-	return render_template('cmdhome.html', commands=sortedcmds(cmdapi.oper_list()))
+	return render_template('cmdhome.html', commands=sortedcmds(cmdapi.oper_list()), lastone=lastcmd)
 
 @app.route('/hacmdapi/v1.3/test/', methods=['GET'])
 def test_page():
@@ -37,15 +40,41 @@ def sortedcmds(cmdgrplist):
 		sortedlist[g] = sorted(cmdgrplist[g])
 	return sortedlist
 
+
+# ###############################################################################
+# Initialize and start the logging
+# ###############################################################################
 syslog.openlog("haweb",0,syslog.LOG_LOCAL0)
 syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_INFO))
 
+
+
+# ###############################################################################
+# Create the pidfile and a log entry for START
+# ###############################################################################
+mypid = str(os.getpid())
+pidfile = open("/var/run/hahub/haweb.pid","w")
+pidfile.write(mypid+"\n")
+pidfile.close()
+
+syslog.syslog(syslog.LOG_CRIT,"HAWEBD STARTED. PID: "+mypid)
+
+
+
+# ###############################################################################
+# initialize the hahub objects - Config and CmdAPI
+# ###############################################################################
 config = haconfig.Config()
 config.readConfig("/etc/hahub/hahubd.conf")
 
 cmdapi = hacmdapi.HacmdAPI()
 cmdapi.setconfig(config)
 
+
+
+# ###############################################################################
+# Read the ha.rc files
+# ###############################################################################
 rcfiles = ["/etc/hahub/ha.rc", "~/.ha.rc", "./ha.rc", "~/bin/ha.rc"]
 for rc in rcfiles:
 	rcpath = os.path.expanduser(rc)
@@ -53,5 +82,11 @@ for rc in rcfiles:
 		syslog.syslog(syslog.LOG_INFO, "Reading conf from %s" % rcpath)
 		cmdapi.readconf(rcpath)
 
+
+
+# ###############################################################################
+# start the WEB Server
+# ###############################################################################
+lastcmd = "None"
 httpport = config.getConfigIntValue("HTTPPORT", 8080)
 app.run(host='0.0.0.0', port=httpport, debug=True)
