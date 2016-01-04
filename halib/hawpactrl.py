@@ -29,7 +29,7 @@ class WpaCtrl:
 	#
 	# import hawpactrl
 	# ...
-	# wpactrlObj = hawpactrl.GPIOops()
+	# wpactrlObj = hawpactrl.WpaCtrl()
 	# wpactrlObj.setconfig(configObj)  # use the haconfig module to create this configObj
 	# wpactrlObj.wpa_open()
 	# ...
