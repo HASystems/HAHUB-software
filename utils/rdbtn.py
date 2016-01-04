@@ -1,9 +1,13 @@
 #!/usr/bin/python
 
+import sys
+
+# First add the path of the hahub libraries so they can be imported below
+(sys.path).append('/usr/local/lib/hahub')
+
 import RPi.GPIO as gpio
 import syslog
 import signal
-import sys
 import haconfig
 
 syslog.openlog("rdbtn",0,syslog.LOG_LOCAL0)
@@ -28,13 +32,13 @@ def wps_act(btn):
 	print "edge detected on WPS %d" % btn
 	rdval = gpio.input(btn)
 	print "value = %d" % rdval
-	gpio.output(5,rdval)
+	gpio.output(ind1_led,rdval)
 
 def func_act(btn):
 	print "edge detected on FUNC %d" % btn
 	rdval = gpio.input(btn)
 	print "value = %d" % rdval
-	gpio.output(6,rdval)
+	gpio.output(ind2_led,rdval)
 
 gpio.setmode(gpio.BCM)
 gpio.setup(wps_btn, gpio.IN)

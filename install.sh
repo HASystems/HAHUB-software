@@ -49,10 +49,10 @@ fi
 
 echo "Removing old $BINDIR files..."
 rm -rf $BINDIR/*
-echo "Copying latest ${SDIR}/bin files to $BINDIR ..."
-cp -r $SDIR/bin/* $BINDIR
-echo "Copying latest ${SDIR}/client files to $BINDIR ..."
-cp -r $SDIR/client/* $BINDIR
+echo "Copying latest ${SDIR}/utils files to $BINDIR ..."
+cp -r $SDIR/utils/* $BINDIR
+echo "Copying latest ${SDIR}/cli files to $BINDIR ..."
+cp -r $SDIR/cli/* $BINDIR
 
 echo "Copying rc.local to /etc/rc.local..."
 cp -r $SDIR/etc/rc.local /etc/rc.local
