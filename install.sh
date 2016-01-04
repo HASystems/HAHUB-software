@@ -67,7 +67,7 @@ rm -rf $LIBDIR/*
 echo "Copying files from ${SDIR}/halib to $LIBDIR ..."
 cp -r $SDIR/halib/* $LIBDIR
 
-echo "Copying $SDIR/dev/etc/rc.local to /etc/rc.local"
-cp $SDIR/dev/etc/rc.local /etc/rc.local
+echo "Copying $SDIR/etc/rc.local to /etc/rc.local"
+cp $SDIR/etc/rc.local /etc/rc.local
 
 echo "Done"
