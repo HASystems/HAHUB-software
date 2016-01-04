@@ -2,13 +2,7 @@
 TODO
 ----------------
 
-Make the LED operations as a separate thread service with APIs
-
-Validate the WPS button function for some more WiFi networks
-
-Find out how to remove existing WiFi networks (added via WPS) via commandline
-
-Provide some visual feedback of WPS button actually getting pressed via perhaps an lED blinking or something
+Remove direct dependence of hawifimon.py on hagpioops.py
 
 generate compiled distribution of the full software
 
@@ -19,4 +13,13 @@ complete the full write-up for installing and using the software
 ----------------
 Completed
 ----------------
+
+Make the LED operations as a separate thread service with APIs
+
+Validate the WPS button function for some more WiFi networks
+
+Find out how to remove existing WiFi networks (added via WPS) via commandline
+
+Provide some visual feedback of WPS button actually getting pressed via perhaps an lED blinking or something
+	- the WSTS LED starts blinking when WPS button is pressed (because the WiFi state changes).
 
