@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import os
 import syslog
 from flask import Flask, render_template, redirect
@@ -47,7 +49,7 @@ def sortedcmds(cmdgrplist):
 # Initialize and start the logging
 # ###############################################################################
 syslog.openlog("haweb",0,syslog.LOG_LOCAL0)
-syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_INFO))
+syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_WARNING))
 
 
 

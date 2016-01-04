@@ -21,6 +21,6 @@ then
 	mv /var/log/hahub/haweb-nohup.out /var/log/hahub/haweb-nohup.out.old
 fi
 
-nohup /etc/hahub/webapp.py > /var/log/hahub/haweb-nohup.out &
+nohup /etc/hahub/hawebd.py > /var/log/hahub/haweb-nohup.out &
 
 exit 0

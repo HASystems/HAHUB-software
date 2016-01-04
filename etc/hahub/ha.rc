@@ -52,3 +52,5 @@ MACRO Channel:sci 	scntv 1258 OK
 MACRO Channel:star+ 	scntv 3706 OK
 MACRO Channel:zee 	scntv 3702 OK
 MACRO Channel:set 	scntv 3704 OK
+MACRO Audio:v+5 	v+ v+ v+ v+ v+
+MACRO Audio:v-5 	v- v- v- v- v-
