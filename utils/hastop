@@ -1,0 +1,4 @@
+#!/bin/bash
+
+kill -15 $(cat /var/run/hahub/hahub.pid)
+kill -15 $(cat /var/run/hahub/haweb.pid)

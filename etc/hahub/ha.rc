@@ -33,6 +33,7 @@ CMD Arrows:up		U-verse KEY_UP
 CMD Arrows:down		U-verse KEY_DOWN
 CMD Arrows:left		U-verse KEY_LEFT
 CMD Arrows:right	U-verse KEY_RIGHT
+CMD Arrows:dvr		U-verse KEY_RECORDEDTV
 CMD Channel:guide	U-verse KEY_GUIDE
 CMD Channel:ch-		U-verse KEY_CHPG-
 CMD Channel:ch+		U-verse KEY_CHPG+
@@ -48,11 +49,14 @@ CMD Player:pause	U-verse KEY_PAUSE
 # These are basically convinience to the user
 #
 MACRO Power:allon 	scntv uvon tvon
-MACRO Channel:cnn 	scntv 1202 OK
-MACRO Channel:msnbc 	scntv 1215 OK
-MACRO Channel:sci 	scntv 1258 OK
-MACRO Channel:star+ 	scntv 3706 OK
-MACRO Channel:zee 	scntv 3702 OK
-MACRO Channel:set 	scntv 3704 OK
+MACRO Quickpicks:cnn 	scntv 1202 OK
+MACRO Quickpicks:msnbc 	scntv 1215 OK
+MACRO Quickpicks:sci 	scntv 1258 OK
+MACRO Quickpicks:natgeo 	scntv 1265 OK
+MACRO Quickpicks:bloom 	scntv 1222 OK
+MACRO Quickpicks:food 	scntv 1453 OK
+MACRO Quickpicks:cook 	scntv 1456 OK
+MACRO Quickpicks:star+ 	scntv 3706 OK
+MACRO Quickpicks:sonytv 	scntv 3704 OK
 MACRO Audio:v+5 	v+ v+ v+ v+ v+
 MACRO Audio:v-5 	v- v- v- v- v-
