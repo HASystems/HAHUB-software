@@ -2,6 +2,8 @@
 TODO
 ----------------
 
+Mount the filesystem read-only <?>
+
 Remove direct dependence of hawifimon.py on hagpioops.py
 
 generate compiled distribution of the full software
