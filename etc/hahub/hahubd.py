@@ -48,6 +48,14 @@ signal.signal(signal.SIGUSR1, chloglevel)
 signal.signal(signal.SIGUSR2, chloglevel)
 
 # ###############################################################################
+# Setup callback for FUNC button to shutdown the OS
+# ###############################################################################
+def callback_Halt_System(btn):
+	syslog.syslog(syslog.LOG_WARNING, "Responding to FUNC button press. Shuttng down...")
+	os.execv("/sbin/halt", ["/sbin/halt"])
+gpioops.callback_funcbtn_onrising(callback_Halt_System)
+
+# ###############################################################################
 # Create the pidfile and a log entry for START
 # ###############################################################################
 mypid = str(os.getpid())

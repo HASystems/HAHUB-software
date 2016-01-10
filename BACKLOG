@@ -16,6 +16,8 @@ complete the full write-up for installing and using the software
 Completed
 ----------------
 
+Make FUNC button as teh shutdown button - however, right now it works right-away on a click
+
 Make the LED operations as a separate thread service with APIs
 
 Validate the WPS button function for some more WiFi networks
