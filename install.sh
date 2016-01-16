@@ -1,18 +1,20 @@
 #!/bin/bash
 
+USER=pi
 
-SDIR=$(dirname $0)
-BINDIR=~pi/bin
+DEVDIR=`eval echo ~$USER`/dev
+BINDIR=/usr/local/bin/
+HABINDIR=$BINDIR/hahub
 ETCDIR=/etc/hahub
 LIBDIR=/usr/local/lib/hahub
 VARLOGDIR=/var/log/hahub
 
-if [ ! -e $BINDIR ]; then
-	echo "Creating $BINDIR ..."
-	mkdir -p $BINDIR
+if [ ! -e $HABINDIR ]; then
+	echo "Creating $HABINDIR ..."
+	mkdir -p $HABINDIR
 else
-	if [ ! -d $BINDIR ]; then
-		echo "$BINDIR exists and is not a directory. Aborting ..."
+	if [ ! -d $HABINDIR ]; then
+		echo "$HABINDIR exists and is not a directory. Aborting ..."
 		exit 1
 	fi
 fi
@@ -47,27 +49,32 @@ else
 	fi
 fi
 
-echo "Removing old $BINDIR files..."
-rm -rf $BINDIR/*
-echo "Copying latest ${SDIR}/utils files to $BINDIR ..."
-cp -r $SDIR/utils/* $BINDIR
-echo "Copying latest ${SDIR}/cli files to $BINDIR ..."
-cp -r $SDIR/cli/* $BINDIR
+echo "Removing old $HABINDIR files..."
+rm -rf $HABINDIR/*
+echo "Copying latest ${DEVDIR}/utils files to $HABINDIR ..."
+cp -r $DEVDIR/utils/* $HABINDIR
+echo "Copying latest ${DEVDIR}/cli files to $HABINDIR ..."
+cp -r $DEVDIR/cli/* $HABINDIR
+echo "Linking files in $HABINDIR to $BINDIR ..."
+for f in $( ls $HABINDIR ); do
+	rm $BINDIR/$f
+	ln -s $HABINDIR/$f $BINDIR
+done
 
 echo "Copying rc.local to /etc/rc.local..."
-cp -r $SDIR/etc/rc.local /etc/rc.local
+cp -r $DEVDIR/etc/rc.local /etc/rc.local
 
 echo "Removing old $ETCDIR files..."
 rm -rf $ETCDIR/*
-echo "Copying files from ${SDIR}/etc/hahub to $ETCDIR ..."
-cp -r $SDIR/etc/hahub/* $ETCDIR
+echo "Copying files from ${DEVDIR}/etc/hahub to $ETCDIR ..."
+cp -r $DEVDIR/etc/hahub/* $ETCDIR
 
 echo "Removing old $LIBDIR files..."
 rm -rf $LIBDIR/*
-echo "Copying files from ${SDIR}/halib to $LIBDIR ..."
-cp -r $SDIR/halib/* $LIBDIR
+echo "Copying files from ${DEVDIR}/halib to $LIBDIR ..."
+cp -r $DEVDIR/halib/* $LIBDIR
 
-echo "Copying $SDIR/etc/rc.local to /etc/rc.local"
-cp $SDIR/etc/rc.local /etc/rc.local
+echo "Copying $DEVDIR/etc/rc.local to /etc/rc.local"
+cp $DEVDIR/etc/rc.local /etc/rc.local
 
 echo "Done"

@@ -17,10 +17,7 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
-# start HA-Hub's wifimon
-/etc/hahub/start-hahub
-
-# start HA-Hub's web-server
-/etc/hahub/start-haweb
+# start HA-Hub's wifimon and web-server
+/usr/local/bin/hastart
 
 exit 0

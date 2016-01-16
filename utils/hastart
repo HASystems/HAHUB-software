@@ -1,7 +1,5 @@
 #!/bin/bash
 
-PATH=$PATH:~pi/dev/utils
-
 # start HA-Hub's wifimon
 /etc/hahub/start-hahub
 
