@@ -52,7 +52,13 @@ signal.signal(signal.SIGUSR2, chloglevel)
 # ###############################################################################
 def callback_Halt_System(btn):
 	syslog.syslog(syslog.LOG_WARNING, "Responding to FUNC button press. Shuttng down...")
+	# Seems as soon as the '/sbin/halt' is executed, it stops the threads, at least the GPIO thread just stops.
+	# Hence not using blink or toggle, just turning the ststLED2 ON to acknowledge the press of FUNC button.
+	# and sleeping for 1 sec to let teh GPIO therad turn the stsLED2 ON.
+	gpioops.stsLED2ledon()
+	time.sleep(1)
 	os.execv("/sbin/halt", ["/sbin/halt"])
+	syslog.syslog(syslog.LOG_WARNING, "Starting shutdown NOW ...")
 gpioops.callback_funcbtn_onrising(callback_Halt_System)
 
 # ###############################################################################

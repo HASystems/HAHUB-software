@@ -1,0 +1,18 @@
+#!/bin/bash
+
+PATH=$PATH:~pi/dev/utils
+
+hastop
+if [ $? -ne 0 ]; then
+	echo "HAHUBD, HAWEBD stop failed. Not restarting."
+	exit 1
+fi
+
+sleep 3
+
+# start HA-Hub's wifimon
+/etc/hahub/start-hahub
+
+# start HA-Hub's web-server
+/etc/hahub/start-haweb
+
