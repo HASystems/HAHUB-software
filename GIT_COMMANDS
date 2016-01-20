@@ -3,10 +3,10 @@ git status
 git commit -m "comment message"
 git push origin master
 Username: atulvarshneya
-Password: renuatul123
+Password: atul123
 
 
 # create a file ~/.netrc with the following line
-machine github.com login atulvarshneya password renuatul123
+machine github.com login atulvarshneya password atul123
 # and change its permissions as chmod 600 ~/.netrc
 # with this, you will not be prompted for userid and password each time
