@@ -37,7 +37,7 @@ while True:
 		pass
 	else:
 		for curcmd in cmdlist:
-			if curcmd =="list":
+			if curcmd =="list" or curcmd == "l":
 				syslog.syslog(syslog.LOG_INFO, "Executong command; %s" % curcmd)
 				clist = hacmdapi.oper_list()
 				for g in sorted(clist.keys()):
@@ -46,6 +46,14 @@ while True:
 					for c in sorted(clist[g]):
 						prline = prline + "    %s" % c
 					print prline
+			elif curcmd == "?":
+				syslog.syslog(syslog.LOG_INFO, "printing help")
+				print "Commands:"
+				print "l	- list all commands"
+				print "list	- list all commands"
+				print "q	- quit"
+				print "?	- print help (this text)"
+				print "any command as listed by 'list' command"
 			elif curcmd == "q":
 				syslog.syslog(syslog.LOG_INFO, "Quitting")
 				exit()
