@@ -60,6 +60,13 @@ for f in $( ls $HABINDIR ); do
 	rm $BINDIR/$f
 	ln -s $HABINDIR/$f $BINDIR
 done
+echo "Removing any broken symbolic links left behind ..."
+for f in $( ls $BINDIR ); do
+	if [ -h $BINDIR/$f -a ! -e $BINDIR/$f ]; then
+		echo "REMOVING $BINDIR/$f ..."
+		rm $BINDIR/$f
+	fi
+done
 
 echo "Copying rc.local to /etc/rc.local..."
 cp -r $DEVDIR/etc/rc.local /etc/rc.local
