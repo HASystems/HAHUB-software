@@ -27,6 +27,7 @@ CMD Channel:7		U-verse KEY_7
 CMD Channel:8		U-verse KEY_8
 CMD Channel:9		U-verse KEY_9
 CMD Arrows:exit		U-verse KEY_EXIT
+CMD Arrows:back		U-verse KEY_BACK
 CMD Arrows:info		U-verse KEY_INFO
 CMD Arrows:OK		U-verse KEY_OK
 CMD Arrows:up		U-verse KEY_UP
@@ -43,6 +44,7 @@ CMD Player:ff		U-verse KEY_FF
 CMD Player:rr		U-verse KEY_REW
 CMD Player:play		U-verse KEY_PLAY
 CMD Player:pause	U-verse KEY_PAUSE
+CMD Player:stop		U-verse KEY_STOP
 
 #
 # Now the macros
