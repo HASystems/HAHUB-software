@@ -1,14 +1,12 @@
 #!/bin/bash
 
 STATUS=0
-kill -15 $(cat /var/run/hahub/hahub.pid)
+/etc/hahub/stop-hahub
 if [ $? -ne 0 ]; then
-	echo "Failure"
 	STATUS=1
 fi
-kill -15 $(cat /var/run/hahub/haweb.pid)
+/etc/hahub/stop-haweb
 if [ $? -ne 0 ]; then
-	echo "Failure"
 	STATUS=1
 fi
 

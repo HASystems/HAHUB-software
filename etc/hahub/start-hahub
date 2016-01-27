@@ -2,22 +2,22 @@
 
 export PYTHONPATH=/usr/local/lib/hahub
 
-echo "Starting HAHUB daemon..."
+echo "Starting HAHUB service..."
 if [ ! -d /var/run/hahub ]
 then
-	echo "Creating /var/run/hahub directory..."
+	# echo "Creating /var/run/hahub directory..."
 	mkdir /var/run/hahub
 fi
 
 if [ ! -d /var/log/hahub ]
 then
-	echo "Creating /var/log/hahub directory..."
+	# echo "Creating /var/log/hahub directory..."
 	mkdir /var/log/hahub
 fi
 
 if [ -e /var/log/hahub/hahub-nohup.out ]
 then
-	echo "Saving old hahub-nohup.out..."
+	# echo "Saving old hahub-nohup.out..."
 	mv /var/log/hahub/hahub-nohup.out /var/log/hahub/hahub-nohup.out.old
 fi
 

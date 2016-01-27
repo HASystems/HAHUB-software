@@ -1,0 +1,10 @@
+#!/bin/bash
+
+STATUS=0
+kill -15 $(cat /var/run/hahub/haweb.pid)
+if [ $? -ne 0 ]; then
+	echo "Failure stopping HAWEB"
+	STATUS=1
+fi
+
+exit $STATUS

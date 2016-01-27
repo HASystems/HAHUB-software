@@ -2,6 +2,8 @@
 TODO
 ----------------
 
+Modify init.d/hahub-svcs to use start_daemon instead of nohup
+
 Mount the filesystem read-only <?>
 
 Remove direct dependence of hawifimon.py on hagpioops.py

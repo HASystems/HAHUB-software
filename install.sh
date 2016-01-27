@@ -68,9 +68,6 @@ for f in $( ls $BINDIR ); do
 	fi
 done
 
-echo "Copying rc.local to /etc/rc.local..."
-cp -r $DEVDIR/etc/rc.local /etc/rc.local
-
 echo "Removing old $ETCDIR files..."
 rm -rf $ETCDIR/*
 echo "Copying files from ${DEVDIR}/etc/hahub to $ETCDIR ..."
@@ -81,7 +78,13 @@ rm -rf $LIBDIR/*
 echo "Copying files from ${DEVDIR}/halib to $LIBDIR ..."
 cp -r $DEVDIR/halib/* $LIBDIR
 
-echo "Copying $DEVDIR/etc/rc.local to /etc/rc.local"
-cp $DEVDIR/etc/rc.local /etc/rc.local
+# echo "Copying $DEVDIR/etc/rc.local to /etc/rc.local"
+# cp $DEVDIR/etc/rc.local /etc/rc.local
+echo "Uninstalling hahub-svcs..."
+insserv --remove hahub-svcs
+echo "Copying current habub-svcs script to /etc/init.d ..."
+cp $DEVDIR/init.d/hahub-svcs /etc/init.d/hahub-svcs
+echo "Installing current hahub-svcs in runlevels ..."
+insserv hahub-svcs
 
 echo "Done"
