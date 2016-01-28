@@ -24,8 +24,18 @@ case "$1" in
 		# echo "Stopping service HAWEB"
 		/etc/hahub/stop-haweb
 		;;
+	status)
+		ps -p `cat /var/run/hahub/hahub.pid`
+		if [ $? -eq 0 ]; then
+			echo "HaHubd running."
+		fi
+		ps -p `cat /var/run/hahub/haweb.pid`
+		if [ $? -eq 0 ]; then
+			echo "HaWebd running."
+		fi
+		;;
 	*)
-		echo "Usage: /etc/init.d/hahub-svcs {start|stop}"
+		echo "Usage: /etc/init.d/hahub-svcs {start|stop|status}"
 		exit 1
 		;;
 esac
