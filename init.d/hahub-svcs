@@ -25,11 +25,11 @@ case "$1" in
 		/etc/hahub/stop-haweb
 		;;
 	status)
-		ps -p `cat /var/run/hahub/hahub.pid`
+		ps -p `cat /var/run/hahub/hahub.pid` > /dev/null
 		if [ $? -eq 0 ]; then
 			echo "HaHubd running."
 		fi
-		ps -p `cat /var/run/hahub/haweb.pid`
+		ps -p `cat /var/run/hahub/haweb.pid` > /dev/null
 		if [ $? -eq 0 ]; then
 			echo "HaWebd running."
 		fi
