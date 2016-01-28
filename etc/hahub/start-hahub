@@ -2,7 +2,7 @@
 
 export PYTHONPATH=/usr/local/lib/hahub
 
-echo "Starting HAHUB service..."
+# echo "Starting HAHUB service..."
 if [ ! -d /var/run/hahub ]
 then
 	echo "Creating /var/run/hahub directory..."

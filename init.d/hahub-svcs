@@ -13,16 +13,16 @@
 
 case "$1" in
 	start)
-		# echo "Starting service HAHUB"
+		echo "Starting service HAHUB"
 		/etc/hahub/start-hahub
-		# echo "Starting service HAWEB"
+		echo "Starting service HAWEB"
 		/etc/hahub/start-haweb
 		exit 0
 		;;
 	stop)
-		# echo "Stopping service HAHUB"
+		echo "Stopping service HAHUB"
 		/etc/hahub/stop-hahub
-		# echo "Stopping service HAWEB"
+		echo "Stopping service HAWEB"
 		/etc/hahub/stop-haweb
 		exit 0
 		;;
@@ -44,8 +44,13 @@ case "$1" in
 		fi
 		exit $sts
 		;;
+	restart)
+		$0 stop
+		$0 start
+		exit $?
+		;;
 	*)
-		echo "Usage: /etc/init.d/hahub-svcs {start|stop|status}"
+		echo "Usage: /etc/init.d/hahub-svcs {start|stop|status|restart}"
 		exit 1
 		;;
 esac
