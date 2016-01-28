@@ -17,22 +17,32 @@ case "$1" in
 		/etc/hahub/start-hahub
 		# echo "Starting service HAWEB"
 		/etc/hahub/start-haweb
+		exit 0
 		;;
 	stop)
 		# echo "Stopping service HAHUB"
 		/etc/hahub/stop-hahub
 		# echo "Stopping service HAWEB"
 		/etc/hahub/stop-haweb
+		exit 0
 		;;
 	status)
+		sts=0
 		ps -p `cat /var/run/hahub/hahub.pid` > /dev/null
 		if [ $? -eq 0 ]; then
 			echo "HaHubd running."
+		else
+			echo "HaHubd NOT running."
+			sts=1
 		fi
 		ps -p `cat /var/run/hahub/haweb.pid` > /dev/null
 		if [ $? -eq 0 ]; then
 			echo "HaWebd running."
+		else
+			echo "HaWebd NOT running."
+			sts=1
 		fi
+		exit $sts
 		;;
 	*)
 		echo "Usage: /etc/init.d/hahub-svcs {start|stop|status}"
