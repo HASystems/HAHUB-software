@@ -83,8 +83,6 @@ echo "Copying files from ${DEVDIR}/halib to $LIBDIR ..."
 cp -r $DEVDIR/halib/* $LIBDIR
 echo
 
-# echo "Copying $DEVDIR/etc/rc.local to /etc/rc.local"
-# cp $DEVDIR/etc/rc.local /etc/rc.local
 echo "Uninstalling hahub-svcs..."
 insserv --remove hahub-svcs
 echo "Copying current habub-svcs script to /etc/init.d ..."
