@@ -1,10 +1,17 @@
 #!/bin/bash
 
 STATUS=0
-kill -15 $(cat /var/run/hahub/haweb.pid)
+ps -p `cat /var/run/hahub/haweb.pid` > /dev/null
 if [ $? -ne 0 ]; then
-	echo "Failure stopping HAWEB"
+	echo "HAWEB process not found."
 	STATUS=1
+else
+	kill -15 $(cat /var/run/hahub/haweb.pid)
+	if [ $? -ne 0 ]; then
+		echo "Failure stopping HAWEB"
+		STATUS=1
+	fi
 fi
 
 exit $STATUS
+
