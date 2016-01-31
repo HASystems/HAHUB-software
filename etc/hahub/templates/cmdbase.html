@@ -11,14 +11,14 @@
 			<h1>HAHUB Remote</h1>
 			<p> Last command: {{lastone}}</p>
 				<table border="1">
-					{% for g in commands.keys() %}
+					{% for g in cmdlist %}
 						<tr>
-							<th> {{ g }} </th>
+							<th> <p align=left> {{ g }} </left> </p>
 							{% for c in commands[g] %}
 									<td width=50>
-											<a href="/hacmdHTML/v1.3/commands/{{c}}">
-											<center><font size=5> {{c}} </font></center>
-											</a>
+											<button style="height:35px;width:90px" onclick="location.href='/hacmdHTML/v1.3/commands/{{c}}';">
+											<font size=5> {{c}} </font>
+											</button>
 									</td>
 							{% endfor %}
 						</tr>

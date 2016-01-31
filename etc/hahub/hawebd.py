@@ -22,7 +22,7 @@ def get_commands():
 	global cmdapi
 	global lastcmd
 	syslog.syslog(syslog.LOG_INFO, "Home Page")
-	return render_template('cmdhome.html', commands=sortedcmds(cmdapi.oper_list()), lastone=lastcmd)
+	return render_template('cmdhome.html', cmdlist=sorted((cmdapi.oper_list()).keys()), commands=sortedcmds(cmdapi.oper_list()), lastone=lastcmd)
 
 @app.route('/')
 def index():
@@ -36,7 +36,7 @@ def test_page():
 	syslog.syslog(syslog.LOG_INFO, "Test Page")
 	print "Test Page"
 	# print render_template('test.html', commands=sortedcmds(cmdapi.oper_list()))
-	return render_template('test.html', commands=sortedcmds(cmdapi.oper_list()))
+	return render_template('cmdhome.html', cmdlist=sorted((cmdapi.oper_list()).keys()), commands=sortedcmds(cmdapi.oper_list()), lastone=lastcmd)
 
 def sortedcmds(cmdgrplist):
 	sortedlist = {}

@@ -2,63 +2,62 @@
 # This section defines operations including which device performs those and how
 # Depends on how the devices are connected (which controls audio, channels, etc.)
 #
-CMD Power:uvon		U-Verse KEY_POWER
-CMD Power:tvon		Sharp-Aquous KEY_POWER
-CMD Power:wtvon		Westing KEY_POWER
-CMD Power:rcvron 	RX-V675 KEY_POWER
-CMD Scene:scntv 	RX-V675 KEY_TV
-CMD Scene:scndvd 	RX-V675 KEY_DVD
-CMD Scene:scnpc 	RX-V675 KEY_CD
-CMD Scene:scnradio 	RX-V675 KEY_RADIO
-CMD Scene:scnroku 	RX-V675 KEY_HDMI4
-CMD Audio:dsp+		RX-V675 KEY_PROGRAMUP
-CMD Audio:dsp-		RX-V675 KEY_PROGRAMDOWN
-CMD Audio:v+ 		RX-V675 KEY_VOLUMEUP
-CMD Audio:v- 		RX-V675 KEY_VOLUMEDOWN
-CMD Audio:mute 		RX-V675 KEY_MUTE
-CMD Channel:0		U-verse KEY_0
-CMD Channel:1		U-verse KEY_1
-CMD Channel:2		U-verse KEY_2
-CMD Channel:3		U-verse KEY_3
-CMD Channel:4		U-verse KEY_4
-CMD Channel:5		U-verse KEY_5
-CMD Channel:6		U-verse KEY_6
-CMD Channel:7		U-verse KEY_7
-CMD Channel:8		U-verse KEY_8
-CMD Channel:9		U-verse KEY_9
-CMD Arrows:exit		U-verse KEY_EXIT
-CMD Arrows:back		U-verse KEY_BACK
-CMD Arrows:info		U-verse KEY_INFO
-CMD Arrows:OK		U-verse KEY_OK
-CMD Arrows:up		U-verse KEY_UP
-CMD Arrows:down		U-verse KEY_DOWN
-CMD Arrows:left		U-verse KEY_LEFT
-CMD Arrows:right	U-verse KEY_RIGHT
-CMD Arrows:dvr		U-verse KEY_RECORDEDTV
-CMD Channel:guide	U-verse KEY_GUIDE
-CMD Channel:ch-		U-verse KEY_CHPG-
-CMD Channel:ch+		U-verse KEY_CHPG+
-CMD Player:rew		U-verse KEY_REPLAY
-CMD Player:fwd		U-verse KEY_FWD
-CMD Player:ff		U-verse KEY_FF
-CMD Player:rr		U-verse KEY_REW
-CMD Player:play		U-verse KEY_PLAY
-CMD Player:pause	U-verse KEY_PAUSE
-CMD Player:stop		U-verse KEY_STOP
+CMD 01-Power:uvon		U-Verse KEY_POWER
+CMD 01-Power:tvon		Sharp-Aquous KEY_POWER
+CMD 01-Power:wtvon		Westing KEY_POWER
+CMD 01-Power:rcvron 	RX-V675 KEY_POWER
+CMD 02-Scene:scntv 	RX-V675 KEY_TV
+CMD 02-Scene:scndvd 	RX-V675 KEY_DVD
+CMD 02-Scene:scnpc 	RX-V675 KEY_CD
+CMD 02-Scene:scnradio 	RX-V675 KEY_RADIO
+CMD 02-Scene:scnroku 	RX-V675 KEY_HDMI4
+CMD 03-NumPad:0		U-verse KEY_0
+CMD 03-NumPad:1		U-verse KEY_1
+CMD 03-NumPad:2		U-verse KEY_2
+CMD 03-NumPad:3		U-verse KEY_3
+CMD 03-NumPad:4		U-verse KEY_4
+CMD 03-NumPad:5		U-verse KEY_5
+CMD 03-NumPad:6		U-verse KEY_6
+CMD 03-NumPad:7		U-verse KEY_7
+CMD 03-NumPad:8		U-verse KEY_8
+CMD 03-NumPad:9		U-verse KEY_9
+CMD 04-ChannelNav:guide	U-verse KEY_GUIDE
+CMD 04-ChannelNav:ch-		U-verse KEY_CHPG-
+CMD 04-ChannelNav:ch+		U-verse KEY_CHPG+
+CMD 05-Arrows:OK		U-verse KEY_OK
+CMD 05-Arrows:up		U-verse KEY_UP
+CMD 05-Arrows:down		U-verse KEY_DOWN
+CMD 05-Arrows:left		U-verse KEY_LEFT
+CMD 05-Arrows:right	U-verse KEY_RIGHT
+CMD 06-Arrows:back		U-verse KEY_BACK
+CMD 06-Arrows:dvr		U-verse KEY_RECORDEDTV
+CMD 06-Arrows:exit		U-verse KEY_EXIT
+CMD 06-Arrows:info		U-verse KEY_INFO
+CMD 07-Player:rew		U-verse KEY_REPLAY
+CMD 07-Player:fwd		U-verse KEY_FWD
+CMD 07-Player:ff		U-verse KEY_FF
+CMD 07-Player:rr		U-verse KEY_REW
+CMD 07-Player:play		U-verse KEY_PLAY
+CMD 07-Player:pause	U-verse KEY_PAUSE
+CMD 07-Player:stop		U-verse KEY_STOP
+CMD 08-Audio:dsp+		RX-V675 KEY_PROGRAMUP
+CMD 08-Audio:dsp-		RX-V675 KEY_PROGRAMDOWN
+CMD 08-Audio:v+ 		RX-V675 KEY_VOLUMEUP
+CMD 08-Audio:v- 		RX-V675 KEY_VOLUMEDOWN
+CMD 08-Audio:mute 		RX-V675 KEY_MUTE
 
 #
 # Now the macros
 # These are basically convinience to the user
 #
-MACRO Power:allon 	scntv uvon tvon
-MACRO Quickpicks:cnn 	scntv 1202 OK
-MACRO Quickpicks:msnbc 	scntv 1215 OK
-MACRO Quickpicks:sci 	scntv 1258 OK
-MACRO Quickpicks:natgeo 	scntv 1265 OK
-MACRO Quickpicks:bloom 	scntv 1222 OK
-MACRO Quickpicks:food 	scntv 1453 OK
-MACRO Quickpicks:cook 	scntv 1456 OK
-MACRO Quickpicks:star+ 	scntv 3706 OK
-MACRO Quickpicks:sonytv 	scntv 3704 OK
-MACRO Audio:v+5 	v+ v+ v+ v+ v+
-MACRO Audio:v-5 	v- v- v- v- v-
+MACRO 01-Power:allon 	scntv uvon tvon
+MACRO 08-Audio:v+5 	v+ v+ v+ v+ v+
+MACRO 08-Audio:v-5 	v- v- v- v- v-
+MACRO 09-Quickpicks:cnn 	scntv 1202 OK
+MACRO 09-Quickpicks:msnbc 	scntv 1215 OK
+MACRO 09-Quickpicks:bloom 	scntv 1222 OK
+MACRO 09-Quickpicks:sci 	scntv 1258 OK
+MACRO 10-Quickpicks:natgeo 	scntv 1265 OK
+MACRO 10-Quickpicks:food 	scntv 1453 OK
+MACRO 10-Quickpicks:cook 	scntv 1456 OK
+MACRO 10-Quickpicks:CSNBA		scntv 1770 OK
