@@ -1,0 +1,16 @@
+#!/bin/bash
+
+STATUS=0
+ps -p `cat /var/run/hahub/hahub.pid` > /dev/null
+if [ $? -ne 0 ]; then
+	echo "HAHUB process not found."
+	STATUS=1
+else
+	kill -SIGUSR2 $(cat /var/run/hahub/hahub.pid) 2> /dev/null
+	if [ $? -ne 0 ]; then
+		echo "Failure changing log level"
+		STATUS=1
+	fi
+fi
+
+exit $STATUS
