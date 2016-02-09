@@ -2,33 +2,33 @@
 # This section defines operations including which device performs those and how
 # Depends on how the devices are connected (which controls audio, channels, etc.)
 #
-CMD 01-Power:uvon		U-Verse KEY_POWER
+CMD 01-Power:uvon		U-verse KEY_POWER
 CMD 01-Power:tvon		Sharp-Aquous KEY_POWER
 CMD 01-Power:wtvon		Westing KEY_POWER
-CMD 01-Power:rcvron 	RX-V675 KEY_POWER
-CMD 02-Scene:scntv 	RX-V675 KEY_TV
-CMD 02-Scene:scndvd 	RX-V675 KEY_DVD
-CMD 02-Scene:scnpc 	RX-V675 KEY_CD
-CMD 02-Scene:scnradio 	RX-V675 KEY_RADIO
-CMD 02-Scene:scnroku 	RX-V675 KEY_HDMI4
-CMD 03-NumPad:0		U-verse KEY_0
-CMD 03-NumPad:1		U-verse KEY_1
-CMD 03-NumPad:2		U-verse KEY_2
-CMD 03-NumPad:3		U-verse KEY_3
-CMD 03-NumPad:4		U-verse KEY_4
-CMD 03-NumPad:5		U-verse KEY_5
-CMD 03-NumPad:6		U-verse KEY_6
-CMD 03-NumPad:7		U-verse KEY_7
-CMD 03-NumPad:8		U-verse KEY_8
-CMD 03-NumPad:9		U-verse KEY_9
-CMD 04-ChannelNav:guide	U-verse KEY_GUIDE
+CMD 01-Power:rcvron 		RX-V675 KEY_POWER
+CMD 02-Scene:scntv 		RX-V675 KEY_TV
+CMD 02-Scene:scndvd 		RX-V675 KEY_DVD
+CMD 02-Scene:scnpc 		RX-V675 KEY_CD
+CMD 02-Scene:scnradio 		RX-V675 KEY_RADIO
+CMD 02-Scene:scnroku 		RX-V675 KEY_HDMI4
+CMD 03-NumPad:0			U-verse KEY_0
+CMD 03-NumPad:1			U-verse KEY_1
+CMD 03-NumPad:2			U-verse KEY_2
+CMD 03-NumPad:3			U-verse KEY_3
+CMD 03-NumPad:4			U-verse KEY_4
+CMD 03-NumPad:5			U-verse KEY_5
+CMD 03-NumPad:6			U-verse KEY_6
+CMD 03-NumPad:7			U-verse KEY_7
+CMD 03-NumPad:8			U-verse KEY_8
+CMD 03-NumPad:9			U-verse KEY_9
+CMD 04-ChannelNav:guide		U-verse KEY_GUIDE
 CMD 04-ChannelNav:ch-		U-verse KEY_CHPG-
 CMD 04-ChannelNav:ch+		U-verse KEY_CHPG+
 CMD 05-Arrows:OK		U-verse KEY_OK
 CMD 05-Arrows:up		U-verse KEY_UP
 CMD 05-Arrows:down		U-verse KEY_DOWN
 CMD 05-Arrows:left		U-verse KEY_LEFT
-CMD 05-Arrows:right	U-verse KEY_RIGHT
+CMD 05-Arrows:right		U-verse KEY_RIGHT
 CMD 06-Arrows:back		U-verse KEY_BACK
 CMD 06-Arrows:dvr		U-verse KEY_RECORDEDTV
 CMD 06-Arrows:exit		U-verse KEY_EXIT
@@ -38,7 +38,7 @@ CMD 07-Player:fwd		U-verse KEY_FWD
 CMD 07-Player:ff		U-verse KEY_FF
 CMD 07-Player:rr		U-verse KEY_REW
 CMD 07-Player:play		U-verse KEY_PLAY
-CMD 07-Player:pause	U-verse KEY_PAUSE
+CMD 07-Player:pause		U-verse KEY_PAUSE
 CMD 07-Player:stop		U-verse KEY_STOP
 CMD 08-Audio:dsp+		RX-V675 KEY_PROGRAMUP
 CMD 08-Audio:dsp-		RX-V675 KEY_PROGRAMDOWN
@@ -50,14 +50,14 @@ CMD 08-Audio:mute 		RX-V675 KEY_MUTE
 # Now the macros
 # These are basically convinience to the user
 #
-MACRO 01-Power:allon 	scntv uvon tvon
-MACRO 08-Audio:v+5 	v+ v+ v+ v+ v+
-MACRO 08-Audio:v-5 	v- v- v- v- v-
-MACRO 09-Quickpicks:cnn 	scntv 1202 OK
-MACRO 09-Quickpicks:msnbc 	scntv 1215 OK
-MACRO 09-Quickpicks:bloom 	scntv 1222 OK
-MACRO 09-Quickpicks:sci 	scntv 1258 OK
-MACRO 10-Quickpicks:natgeo 	scntv 1265 OK
-MACRO 10-Quickpicks:food 	scntv 1453 OK
-MACRO 10-Quickpicks:cook 	scntv 1456 OK
-MACRO 10-Quickpicks:CSNBA		scntv 1770 OK
+MACRO 01-Power:allon 		scntv uvon tvon
+MACRO 08-Audio:v+5 		v+ v+ v+ v+ v+
+MACRO 08-Audio:v-5 		v- v- v- v- v-
+MACRO 09-Quickpicks:cnn 	scntv SLOW 1202 NOTSLOW OK
+MACRO 09-Quickpicks:msnbc 	scntv SLOW 1215 NOTSLOW OK
+MACRO 09-Quickpicks:bloom 	scntv SLOW 1222 NOTSLOW OK
+MACRO 09-Quickpicks:sci 	scntv SLOW 1258 NOTSLOW OK
+MACRO 10-Quickpicks:natgeo 	scntv SLOW 1265 NOTSLOW OK
+MACRO 10-Quickpicks:food 	scntv SLOW 1453 NOTSLOW OK
+MACRO 10-Quickpicks:cook 	scntv SLOW 1456 NOTSLOW OK
+MACRO 10-Quickpicks:CSNBA	scntv SLOW 1770 NOTSLOW OK

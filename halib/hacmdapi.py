@@ -19,6 +19,7 @@ class HacmdAPI:
 		self.macro_dict = {}
 		self.grp_dict = {}
 		self.defgrp = "Ungrouped"
+		self.slowly = False
 
 	def isop(self,op):
 		return self.cmd_dict.has_key(op)
@@ -167,18 +168,26 @@ class HacmdAPI:
 	def runlist(self,cmdlist,tagtxt):
 		for opcmd in cmdlist:
 			cmdpar = string.split(opcmd,":",1)
-			if cmdpar[0] == "delay":
+			if cmdpar[0] == "SLOW":
+				self.slowly = True
+				syslog.syslog(syslog.LOG_INFO, "SLOW flag set to TRUE.")
+			elif cmdpar[0] == "NOTSLOW":
+				self.slowly = False
+				syslog.syslog(syslog.LOG_INFO, "SLOW flag reset to FALSE.")
+			elif cmdpar[0] == "delay":
 				nsecs = 0
 				try:
 					nsecs = float(cmdpar[1])
 				except ValueError as msg:
 					syslog.syslog(syslog.LOG_WARNING, "Error in command: '%s'. (Running %s)." % (opcmd,tagtxt))
 				if nsecs > 0:
+					syslog.syslog(syslog.LOG_INFO, "Pausing because SLOW flag is set.")
 					time.sleep(nsecs)
 			elif self.isop(opcmd):
 				cmd =  self.expcmd(opcmd)
 				self.irsend(cmd)
-				time.sleep(0.5) # this is a hack ... seems U-Verse ignores if same command repeats quickly, e.g., 0 twice quickly
+				if self.slowly:
+					time.sleep(0.5) # seems U-Verse ignores if same command repeats quickly, e.g., 0 twice quickly. So use SLOW flag.
 			elif self.ismacro(opcmd):
 				newcmdlist = self.expmacro(opcmd)
 				self.runlist(newcmdlist,opcmd)
