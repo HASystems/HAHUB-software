@@ -1,9 +1,0 @@
-sitemap default label="Family Room" {
-	Frame label="Yamaha RX-V675" {
-		Switch item=Yamaha_Power label="Power" mappings=["OFF"="Off", "ON"="On"]
-		Slider item=Yamaha_Volume label="Volume"
-		Switch item=Yamaha_Mute label="Mute" mappings=["ON"=" X ", "OFF"=" O "]
-		Selection item=Yamaha_Input label="Scene Selection" mappings=[HDMI1="BlueRay",HDMI2="DVR",HDMI3="PC",HDMI4="Roku", "AirPlay"="AirPlay","Pandora"="Pandora"]
-		Selection item=Yamaha_Surround label="Surround Mode" mappings=["Standard"="Standard","Hall in Munich"="Hall in Munich","Hall in Vienna"="Hall in Vienna","Spectacle"="Spectacle","Adventure"="Adventure","Drama"="Drama","2ch Stereo"="2ch","7ch Stereo"="7ch"]
-	}
-}
