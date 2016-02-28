@@ -1,0 +1,8 @@
+sitemap default label="living" {
+	Frame {
+		Selection item=Yamaha_NetRadio label="Sender" mappings=[1="N Joy", 2="Radio Sport", 3="RDU", 4="91ZM", 5="Hauraki"]
+		Selection item=Yamaha_Input mappings=[HDMI1="BlueRay",HDMI2="DVR","NET RADIO"="PC",TUNER="Roku"]
+		Selection item=Yamaha_Input label="Scene Selection" mappings=[HDMI1="BlueRay",HDMI2="DVR",HDMI3="PC",HDMI4="Roku"]
+		Selection item=Yamaha_Surround label="Surround Mode" mappings=["2ch Stereo"="2ch","7ch Stereo"="7ch"]
+	}
+}
