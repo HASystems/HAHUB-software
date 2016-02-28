@@ -1,7 +1,6 @@
-Switch Yamaha_Power	"Power [%s]"		<tv>	{ yamahareceiver="uid=living, zone=main,  bindingType=power" }
-Dimmer Yamaha_Volume	"Volume [%.1f %%]"		{ yamahareceiver="uid=living, zone=main, bindingType=volumePercent" }
-Switch Yamaha_Mute	"Mute [%s]"			{ yamahareceiver="uid=living, zone=main, bindingType=mute" }
-String Yamaha_Input	"Input [%s]"			{ yamahareceiver="uid=living, zone=main, bindingType=input" } 
-String Yamaha_Surround	"surround [%s]"			{ yamahareceiver="uid=living, zone=main, bindingType=surroundProgram" } 
-Number Yamaha_NetRadio	"Net Radio" <netRadio>		{ yamahareceiver="uid=living, zone=main, bindingType=netRadio" }
-
+Switch	Yamaha_Power	"Power [%s]"	<switch>	{ yamahareceiver="uid=living, zone=main,  bindingType=power" }
+Dimmer	Yamaha_Volume	"Volume [%.1f %%]"	{ yamahareceiver="uid=living, zone=main, bindingType=volumePercent" }
+Switch	Yamaha_Mute	"Mute [%s]"	{ yamahareceiver="uid=living, zone=main, bindingType=mute" }
+String	Yamaha_Input	"Input [%s]"	{ yamahareceiver="uid=living, zone=main, bindingType=input" }
+String	Yamaha_Surround	"surround [%s]"	{ yamahareceiver="uid=living, zone=main, bindingType=surroundProgram" }
+Number	Yamaha_NetRadio	"Net Radio"	<video>	{ yamahareceiver="uid=living, zone=main, bindingType=netRadio" }

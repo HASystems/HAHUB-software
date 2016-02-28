@@ -1,0 +1,26 @@
+to get the latest release you con go here and copy the link address for the zip file.
+
+https://github.com/cdjackson/HABmin/releases  --> Latest Release
+
+Using this method your Pi will put the addons in the correct "addons" folder. As for the remaining files, it will create a "habmin" folder in the "`webapps" folder and dump the files there
+
+Let begin by stopping openHAB. Assuming you followed my previews ible on how to automatically start openHAB on boot , you should have a file called openhab in your /etc/init.d directory. If not no worries, you do not ave to stop openHAB you will simply have to restart openHAB after completing this step.(find it here)
+
+
+/etc/init.d/openhab stop
+
+Go to the openHAB main directory to download the release there.
+
+cd /opt/openhab
+
+wget https://github.com/cdjackson/HABmin/releases/download/0.1.3-snapshot/habmin.zip
+
+Unzip the file
+
+unzip habmin.zip
+
+Go ahead an restart openHAB
+
+/etc/init.d/openhab start
+
+Thats it. Pretty simple.
